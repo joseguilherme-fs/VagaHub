@@ -28,14 +28,14 @@ VagaHub é uma aplicação web para gerenciamento e visualização de vagas de e
 
 ### Equipe VagaHub
 
-- **José Guilherme**
+- **José Guilherme**  
   GitHub: [@joseguilherme-fs](https://github.com/joseguilherme-fs)
 
-- **Lucas Emiliano**
+- **Lucas Emiliano**  
   GitHub: [@lucas-elds](https://github.com/lucas-elds)
 
-- **Mellanie Marques**
+- **Mellanie Marques**  
   GitHub: [@Mellanie-Marques](https://github.com/Mellanie-Marques)
 
-- **Sofia Leal**
+- **Sofia Leal**  
   GitHub: [@sofialeals](https://github.com/sofialeals)
