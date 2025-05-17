@@ -16,7 +16,7 @@ VagaHub é uma aplicação web para gerenciamento e visualização de vagas de e
 
 ## 💻 Requisitos
 
-- Java 21
+- [Java 21](https://docs.oracle.com/en/java/javase/21/)
 - [Maven](https://maven.apache.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 - Conta no [Supabase](https://supabase.com/)
