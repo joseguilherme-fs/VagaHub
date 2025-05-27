@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Processo Seletivo</title>
+</head>
+<body>
+<h1>Cadastrar Processo Seletivo</h1>
+<form th:action="@{/processos}" th:object="${processo}" method="post">
+    <label for="titulo">Título:</label>
+    <input type="text" id="titulo" name="titulo" th:field="*{titulo}" required><br><br>
+
+    <label for="descricao">Descrição:</label><br>
+    <textarea id="descricao" name="descricao" th:field="*{descricao}" rows="5" cols="40" required></textarea><br><br>
+
+    <label for="linkVaga">Link da Vaga:</label>
+    <input type="url" id="linkVaga" name="linkVaga" th:field="*{linkVaga}"><br><br>
+
+    <label for="areaAtuacao">Área de Atuação:</label>
+    <input type="text" id="areaAtuacao" name="areaAtuacao" th:field="*{areaAtuacao}" required><br><br>
+
+    <label for="tipoContratacao">Tipo de Contratação:</label>
+    <input type="text" id="tipoContratacao" name="tipoContratacao" th:field="*{tipoContratacao}" required><br><br>
+
+    <label for="modeloDeAtuacao">Modelo de Atuação:</label>
+    <input type="text" id="modeloDeAtuacao" name="modeloDeAtuacao" th:field="*{modeloDeAtuacao}" required><br><br>
+
+    <label for="formaCandidatura">Forma de Candidatura:</label>
+    <input type="text" id="formaCandidatura" name="formaCandidatura" th:field="*{formaCandidatura}" required><br><br>
+
+    <label for="estadoVaga">Estado da Vaga:</label>
+    <input type="text" id="estadoVaga" name="estadoVaga" th:field="*{estadoVaga}"><br><br>
+
+    <label for="cidadeVaga">Cidade da Vaga:</label>
+    <input type="text" id="cidadeVaga" name="cidadeVaga" th:field="*{cidadeVaga}"><br><br>
+
+    <label for="nomeEmpresa">Nome da Empresa:</label>
+    <input type="text" id="nomeEmpresa" name="nomeEmpresa" required><br><br>
+
+    <label for="nomesHabilidades">Habilidades (separadas por vírgula):</label><br>
+    <textarea id="nomesHabilidades" name="nomesHabilidades" rows="3" cols="40" required></textarea><br><br>
+
+    <button type="submit">Salvar</button>
+</form>
+</body>
+</html>
