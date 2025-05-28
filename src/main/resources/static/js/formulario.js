@@ -3,7 +3,8 @@ let telaLembrete = document.querySelector('.configuracao-lembrete')
 let telaConfirmacao = document.querySelector('.finalizar-candidatura')
 
 //candidatura
-document.querySelector('.candidatura').addEventListener('submit', (e) => {
+
+document.querySelector('#btn-proximo-candidatura').addEventListener('click', (e) => {
     e.preventDefault();
     telaCandidatura.style.display = 'none';
     telaLembrete.style.display = 'flex';
