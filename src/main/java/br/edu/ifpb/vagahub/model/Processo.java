@@ -21,6 +21,9 @@ public class Processo {
     private String titulo;
 
     @Column(nullable = false)
+    private String status = "Em andamento";
+
+    @Column(nullable = false)
     private String descricao;
 
     private String linkVaga;

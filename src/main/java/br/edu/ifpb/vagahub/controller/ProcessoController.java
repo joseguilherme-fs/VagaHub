@@ -43,12 +43,12 @@ public class ProcessoController {
 
     @GetMapping("/{id}")
     public ModelAndView buscarPorId(@PathVariable Long id) {
-        ModelAndView mv = new ModelAndView("processos/detalhes");
+        ModelAndView mv = new ModelAndView("processos/card");
         Processo processo = processoService.findById(id);
         if (processo != null) {
             mv.addObject("processo", processo);
         } else {
-            mv.setViewName("redirect:/processos");
+            mv.setViewName("redirect:/formulario");
         }
         return mv;
     }
@@ -66,25 +66,18 @@ public class ProcessoController {
         return "redirect:/processos";
     }
 
-
-    @GetMapping("/editar/{id}")
-    public ModelAndView editar(@PathVariable Long id) {
-        ModelAndView mv = new ModelAndView("processos/formulario");
-       Processo processo = processoService.findById(id);
+    @PostMapping("/atualizar/{id}")
+    public String atualizar(@PathVariable Long id, @RequestParam String descricaoProcesso, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura) {
+        Processo processo = processoService.findById(id);
         if (processo != null) {
-            mv.addObject("processo", processo);
-            mv.addObject("empresas", empresaRepository.findAll());
-            mv.addObject("habilidades", habilidadeRepository.findAll());
+            processo.setDescricao(descricaoProcesso);
+            processo.setTipoContratacao(tipoContratacao);
+            processo.setFormaCandidatura(formaCandidatura);
+            processoService.save(processo);
         } else {
-            mv.setViewName("redirect:/processos");
+            return "redirect:/processos";
         }
-        return mv;
-    }
-
-    @PostMapping("/atualizar")
-    public String atualizar(@ModelAttribute Processo processoAtualizado) {
-        processoService.save(processoAtualizado);
-        return "redirect:/processos";
+        return "redirect:/processos/{id}";
     }
 
     @GetMapping("/excluir/{id}")

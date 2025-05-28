@@ -1,58 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualização de Candidatura</title>
-    <link rel="stylesheet" href="/card.css">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<!-- Card de visualização (sem inputs) -->
-<div class="card" th:each="processo : ${processos}">
-    <div class="card" th:object="${processo}">
+    <!-- Card de visualização (sem inputs) -->
+
+    <form class="card" th:object="${processo}" th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">
         <div class="dropdown">
-            <span id="status-indicator" th:style="'background-color: ' + *{statusColor}"></span>
+            <!--            <span id="status-indicator" th:style="'background-color: ' + *{statusColor}"></span>-->
             <div class="select-container">
                 <select class="styled-select" id="status-select" th:field="*{status}">
-                    <option value="em-andamento">Em Andamento</option>
-                    <option value="banco-de-talentos">Banco de Talentos</option>
-                    <option value="finalizado">Finalizado</option>
+                    <option value="Em Andamento">Em Andamento</option>
+                    <option value="Banco de Talentos">Banco de Talentos</option>
+                    <option value="Finalizado">Finalizado</option>
                     <i class="fas fa-chevron-down"></i>
                 </select>
-
             </div>
         </div>
 
-        <h1>Título da Candidatura</h1>
+        <h1 th:text="${processo.titulo}"></h1>
 
         <!-- Conteúdo do card (somente leitura) -->
 
         <div class="info-group">
-            <label>Descrição da Candidatura:</label>
-            <p th:text="${descricao}">Descrição da vaga...</p>
+            <label for="descricao-processo">Descrição da Candidatura:</label>
+            <input id="descricao-processo" name="descricaoProcesso" th:field="*{descricao}" type="text">
+            <p th:text="${processo.descricao}"></p>
         </div>
 
         <div class="info-group">
-            <label>Nome da Empresa:</label>
-            <p th:text="${nomeEmpresa}"></p>
+            <label for="tipo-contratacao">Modelo de Contratação:</label>
+            <input id="tipo-contratacao" name="tipoContratacao" th:field="*{tipoContratacao}" type="text" >
+            <p th:text="${processo.tipoContratacao}"></p>
         </div>
+
         <div class="info-group">
-            <label>Forma de Candidatura:</label>
-            <p th:text="${formaCandidatura}"></p>
+            <label for="forma-candidatura">Forma de Candidatura:</label>
+            <input id="forma-candidatura" name="formaCandidatura" th:field="*{formaCandidatura}" type="text" >
+            <p th:text="${processo.formaCandidatura}"></p>
         </div>
 
 
         <!-- Botões de ação -->
         <div class="card-actions">
-            <button class="btn-edit" th:onclick="'editarProcesso(' + ${processo.id} + ')'">
+            <button type="button" class="btn-edit" th:onclick="'editarProcesso()'">
                 <i class="fas fa-edit"></i> Editar
             </button>
-            <button class="btn-delete" th:onclick="'confirmarExclusao(' + ${processo.id} + ')'">
+            <button type="submit" class="btn-save">
+                <i class="fas fa-check"></i> Salvar alterações
+            </button>
+            <button type="button" class="btn-cancel-edit" th:onclick="'cancelarEdicao()'">
+                <i class="fas fa-cancel"></i> Cancelar
+            </button>
+            <button type="button" class="btn-delete" th:onclick="'confirmarExclusao(' + ${processo.id} + ')'">
                 <i class="fas fa-trash"></i> Excluir
             </button>
         </div>
-    </div>
+    </form>
 
     <!-- Modal de confirmação -->
     <div id="confirmModal" class="modal" style="display:none">
@@ -68,8 +77,22 @@
 
     <script>
         // Funções JavaScript (exemplo)
-        function editarProcesso(id) {
-            window.location.href = '/processos/editar/' + id;
+        function editarProcesso() {
+            document.querySelectorAll(".info-group input").forEach(input => {input.style.display = "block";});
+            document.querySelectorAll(".info-group p").forEach(info => {info.style.display = "none";});
+            document.querySelector(".btn-edit").style.display = "none";
+            document.querySelector(".btn-delete").style.display = "none";
+            document.querySelector(".btn-save").style.display = "block";
+            document.querySelector(".btn-cancel-edit").style.display = "block";
+        }
+
+        function cancelarEdicao(){
+            document.querySelectorAll(".info-group input").forEach(input => {input.style.display = "none";});
+            document.querySelectorAll(".info-group p").forEach(info => {info.style.display = "block";});
+            document.querySelector(".btn-edit").style.display = "block";
+            document.querySelector(".btn-delete").style.display = "block";
+            document.querySelector(".btn-save").style.display = "none";
+            document.querySelector(".btn-cancel-edit").style.display = "none";
         }
 
         function confirmarExclusao(id) {
@@ -88,5 +111,5 @@
             console.log('Excluindo processo:', id);
         }
     </script>
- </body>
+</body>
 </html>
