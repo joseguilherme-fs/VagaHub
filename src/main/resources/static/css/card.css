@@ -191,6 +191,10 @@ h1 {
     display: none;
 }
 
+#select-tipo-contratacao {
+    display: none;
+}
+
 .btn-save {
     display: none;
 }

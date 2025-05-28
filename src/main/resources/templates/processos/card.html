@@ -29,19 +29,25 @@
 
         <div class="info-group">
             <label for="descricao-processo">Descrição da Candidatura:</label>
-            <input id="descricao-processo" name="descricaoProcesso" th:field="*{descricao}" type="text">
+            <input id="descricao-processo" th:field="*{descricao}" type="text">
             <p th:text="${processo.descricao}"></p>
         </div>
 
         <div class="info-group">
-            <label for="tipo-contratacao">Modelo de Contratação:</label>
-            <input id="tipo-contratacao" name="tipoContratacao" th:field="*{tipoContratacao}" type="text" >
+            <label for="select-tipo-contratacao">Modelo de Contratação:</label>
+            <select class="styled-select" id="select-tipo-contratacao" th:field="*{tipoContratacao}">
+                <option value="CLT">CLT</option>
+                <option value="PJ">PJ</option>
+                <option value="Estagiário">Estagiário</option>
+                <option value="Estatutário">Estatutário</option>
+                <i class="fas fa-chevron-down"></i>
+            </select>
             <p th:text="${processo.tipoContratacao}"></p>
         </div>
 
         <div class="info-group">
             <label for="forma-candidatura">Forma de Candidatura:</label>
-            <input id="forma-candidatura" name="formaCandidatura" th:field="*{formaCandidatura}" type="text" >
+            <input id="forma-candidatura" th:field="*{formaCandidatura}" type="text" >
             <p th:text="${processo.formaCandidatura}"></p>
         </div>
 
@@ -74,43 +80,6 @@
             </div>
         </div>
     </div>
-
-    <!--<script>
-        // Funções JavaScript (exemplo)
-        function editarProcesso() {
-            document.querySelectorAll(".info-group input").forEach(input => {input.style.display = "block";});
-            document.querySelectorAll(".info-group p").forEach(info => {info.style.display = "none";});
-            document.querySelector(".btn-edit").style.display = "none";
-            document.querySelector(".btn-delete").style.display = "none";
-            document.querySelector(".btn-save").style.display = "block";
-            document.querySelector(".btn-cancel-edit").style.display = "block";
-        }
-
-        function cancelarEdicao(){
-            document.querySelectorAll(".info-group input").forEach(input => {input.style.display = "none";});
-            document.querySelectorAll(".info-group p").forEach(info => {info.style.display = "block";});
-            document.querySelector(".btn-edit").style.display = "block";
-            document.querySelector(".btn-delete").style.display = "block";
-            document.querySelector(".btn-save").style.display = "none";
-            document.querySelector(".btn-cancel-edit").style.display = "none";
-        }
-
-        function confirmarExclusao(id) {
-            document.getElementById('btnConfirmarExclusao').onclick = function () {
-                excluirProcesso(id);
-            };
-            document.getElementById('confirmModal').style.display = 'block';
-        }
-
-        function fecharModal() {
-            document.getElementById('confirmModal').style.display = 'none';
-        }
-
-        function excluirProcesso(id) {
-            // Implementar lógica de exclusão via AJAX ou redirecionamento
-            console.log('Excluindo processo:', id);
-        }
-    </script>-->
     <script th:src="@{/js/card.js}"></script>
 </body>
 </html>

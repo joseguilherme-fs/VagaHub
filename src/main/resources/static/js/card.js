@@ -23,6 +23,7 @@ function editarProcesso() {
     document.querySelectorAll(".info-group input").forEach(input => {
         input.style.display = "block";
     });
+    document.querySelector("#select-tipo-contratacao").style.display = "block";
     document.querySelectorAll(".info-group p").forEach(info => {
         info.style.display = "none";
     });
@@ -36,6 +37,7 @@ function cancelarEdicao() {
     document.querySelectorAll(".info-group input").forEach(input => {
         input.style.display = "none";
     });
+    document.querySelector("#select-tipo-contratacao").style.display = "none";
     document.querySelectorAll(".info-group p").forEach(info => {
         info.style.display = "block";
     });
