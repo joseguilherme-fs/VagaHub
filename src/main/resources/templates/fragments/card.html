@@ -2,12 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processo Seletivo</title>
     <link rel="stylesheet" th:href="@{/css/card.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<div>
+<div th:insert="fragments/header :: header"></div>
+<div id="edicao-card">
     <form th:fragment="card(processo)" class="card" th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">
         <div class="dropdown">
             <input th:if="${!modoEdicao}" class="inputs-exibicao" id="status" name="status" th:value="${processo.status}"/>
@@ -23,8 +26,6 @@
         </div>
 
         <h1 th:text="${processo.titulo}"></h1>
-
-        <!-- Conteúdo do card (somente leitura) -->
 
         <div class="input-group">
             <label>Descrição do processo:</label>
