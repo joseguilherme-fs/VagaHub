@@ -12,6 +12,7 @@
 <body>
     <div th:insert="fragments/header :: header"></div>
     <main id="lista">
+        <h1 class="titulo">Minhas candidaturas:</h1>
         <div class="card-processo" th:each="processo : ${processos}">
             <div th:replace="fragments/card :: card(${processo})"></div>
         </div>
