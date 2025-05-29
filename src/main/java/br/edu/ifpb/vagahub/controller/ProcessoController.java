@@ -28,10 +28,9 @@ public class ProcessoController {
     @GetMapping("/listar")
     public ModelAndView listarTodos(ModelAndView mv) {
         List<Processo> processos = processoService.findAll();
-        System.out.println(processos);
         mv.addObject("processos", processos);
         mv.addObject("modoEdicao", false);
-        mv.setViewName("listar");
+        mv.setViewName("/processos/listar");
         return mv;
     }
 
@@ -56,7 +55,6 @@ public class ProcessoController {
         }
         return mv;
     }
-
 
     @PostMapping
     public String criar(
