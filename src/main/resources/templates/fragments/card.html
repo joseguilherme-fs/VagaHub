@@ -2,84 +2,91 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualização de Candidatura</title>
+    <title>Processo Seletivo</title>
     <link rel="stylesheet" th:href="@{/css/card.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div id="card-processo" th:fragment="card">
-        <form class="card" th:object="${processo}" th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">
-            <div class="dropdown">
-                <div class="select-container">
-                    <span id="status-indicator"></span>
-                    <select class="styled-select" id="status-select" th:field="*{status}" onchange="mostrarBotaoSalvarStatus()">
-                        <option value="Em Andamento">Em Andamento</option>
-                        <option value="Banco de Talentos">Banco de Talentos</option>
-                        <option value="Finalizado">Finalizado</option>
-                    </select>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <button class="btn-update-status" name="atualizacao" value="atualizarStatus" type="submit">
-                    Salvar
-                </button>
-            </div>
-
-            <h1 th:text="${processo.titulo}"></h1>
-
-            <div class="input-group">
-                <label for="descricao-processo">Descrição do processo:</label>
-                <input id="descricao-processo" th:field="*{descricao}" type="text">
-                <p th:text="${processo.descricao}"></p>
-            </div>
-
-            <div class="input-group">
-                <label for="select-tipo-contratacao">Modelo de contratação:</label>
-                <select class="styled-select" id="select-tipo-contratacao" th:field="*{tipoContratacao}">
-                    <option value="CLT">CLT</option>
-                    <option value="PJ">PJ</option>
-                    <option value="Estagiário">Estagiário</option>
-                    <option value="Estatutário">Estatutário</option>
+<div>
+    <form th:fragment="card(processo)" class="card" th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">
+        <div class="dropdown">
+            <input th:if="${!modoEdicao}" class="inputs-exibicao" id="status" name="status" th:value="${processo.status}"/>
+            <div th:if="${modoEdicao}" class="select-container">
+                <span class="status-indicator"></span>
+                <select class="styled-select" id="status-select" name="status" th:value="${processo.status}">
+                    <option value="Em Andamento">Em Andamento</option>
+                    <option value="Banco de Talentos">Banco de Talentos</option>
+                    <option value="Finalizado">Finalizado</option>
                 </select>
-                <p th:text="${processo.tipoContratacao}"></p>
+                <i class="fas fa-chevron-down"></i>
             </div>
+        </div>
 
-            <div class="input-group">
-                <label for="forma-candidatura">Forma de inscrição:</label>
-                <input id="forma-candidatura" th:field="*{formaCandidatura}" type="text" >
-                <p th:text="${processo.formaCandidatura}"></p>
-            </div>
+        <h1 th:text="${processo.titulo}"></h1>
+
+        <!-- Conteúdo do card (somente leitura) -->
+
+        <div class="input-group">
+            <label>Descrição do processo:</label>
+            <input th:if="${modoEdicao}" name="descricao" th:value="${processo.descricao}" type="text">
+            <input th:if="${!modoEdicao}" class="inputs-exibicao" name="descricao" th:value="${processo.descricao}" readonly/>
+        </div>
+
+        <div class="input-group">
+            <label>Modelo de contratação:</label>
+            <select th:if="${modoEdicao}" class="styled-select" name="tipoContratacao" th:value="${processo.tipoContratacao}">
+                <option value="CLT">CLT</option>
+                <option value="PJ">PJ</option>
+                <option value="Estagiário">Estagiário</option>
+                <option value="Estatutário">Estatutário</option>
+            </select>
+            <input th:if="${!modoEdicao}" class="inputs-exibicao" name="tipoContratacao" th:value="${processo.tipoContratacao}" readonly/>
+        </div>
+
+        <div class="input-group">
+            <label>Forma de candidatura:</label>
+            <select th:if="${modoEdicao}" class="styled-select"  name="formaCandidatura" th:value="${processo.formaCandidatura}">
+                <option value="Concurso">Concurso</option>
+                <option value="Email">Email</option>
+                <option value="Portal de Vagas">Portal de Vagas</option>
+            </select>
+            <input th:if="${!modoEdicao}" name="formaCandidatura" class="inputs-exibicao" th:value="${processo.formaCandidatura}" readonly/>
+        </div>
 
 
-            <!-- Botões de ação -->
-            <div class="buttons">
-                <button type="button" class="btn-edit" th:onclick="'habilitarEdicao()'">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-                <button type="submit" name="atualizacao" value="atualizarInfos" class="btn-save">
-                    <i class="fas fa-check"></i> Salvar alterações
-                </button>
-                <button type="button" class="btn-cancel-edit" th:onclick="'cancelarEdicao()'">
-                    <i class="fas fa-cancel"></i> Cancelar
-                </button>
-                <button type="button" class="btn-delete" th:onclick="'confirmarExclusao(' + ${processo.id} + ')'">
-                    <i class="fas fa-trash"></i> Excluir
-                </button>
-            </div>
-        </form>
+        <!-- Botões de ação -->
+        <div class="buttons">
 
-        <!-- Modal de confirmação -->
+            <button th:if="${!modoEdicao}"  type="submit" name="atualizacao" value="abrirCard" class="btn-edit">
+                <i class="fas fa-edit"></i> Editar
+            </button>
+
+            <button th:if="${modoEdicao}" type="submit" name="atualizacao" value="fecharCard" class="btn-cancel-edit">
+                <i class="fas fa-cancel"></i> Cancelar
+            </button>
+
+            <button type="button" th:if="${!modoEdicao}" class="btn-delete">
+                <i class="fas fa-trash"></i> Excluir
+            </button>
+
+            <button type="submit" th:if="${modoEdicao}" name="atualizacao" value="atualizacaoInfos" class="btn-save">
+                <i class="fas fa-check"></i> Salvar alterações
+            </button>
+
+        </div>
+
         <div id="confirmModal" class="modal" style="display:none">
             <div class="modal-content">
                 <h2>Confirmar Exclusão</h2>
                 <p>Tem certeza que deseja excluir esta candidatura?</p>
                 <div class="modal-actions">
-                    <button onclick="fecharModal()">Cancelar</button>
-                    <button id="btnConfirmarExclusao" class="danger">Excluir</button>
+                    <button type="button" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" name="atualizacao" value="excluirProcesso" id="btnConfirmarExclusao" class="danger">Excluir</button>
                 </div>
             </div>
         </div>
-        <script th:src="@{/js/card.js}"></script>
-    </div>
+    </form>
+</div>
+<script th:src="@{/js/card.js}"></script>
 </body>
 </html>

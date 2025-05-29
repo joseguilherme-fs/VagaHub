@@ -2,7 +2,7 @@
 // Funções de controle de status (indicador de cor)
 function updateIndicatorColor() {
     const select = document.getElementById('status-select');
-    const indicator = document.getElementById('status-indicator');
+    const indicator = document.querySelector('.status-indicator');
 
     switch (select.value) {
         case 'Em Andamento':
@@ -24,7 +24,7 @@ function habilitarEdicao() {
     document.querySelectorAll(".input-group input").forEach(input => {
         input.style.display = "block";
     });
-    document.querySelector("#select-tipo-contratacao").style.display = "block";
+    document.querySelector(".input-group select").style.display = "block";
     document.querySelectorAll(".input-group p").forEach(info => {
         info.style.display = "none";
     });
@@ -38,7 +38,7 @@ function cancelarEdicao() {
     document.querySelectorAll(".input-group input").forEach(input => {
         input.style.display = "none";
     });
-    document.querySelector("#select-tipo-contratacao").style.display = "none";
+    document.querySelector(".input-group select").style.display = "none";
     document.querySelectorAll(".input-group p").forEach(info => {
         info.style.display = "block";
     });
