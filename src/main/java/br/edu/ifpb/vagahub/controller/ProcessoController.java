@@ -25,11 +25,14 @@ public class ProcessoController {
     @Autowired
     private HabilidadeRepository habilidadeRepository;
 
-    @GetMapping
-    public String listarTodos(Model model) {
+    @GetMapping("/listar")
+    public ModelAndView listarTodos(ModelAndView mv) {
         List<Processo> processos = processoService.findAll();
-        model.addAttribute("processos", processos);
-        return "processos/lista";
+        System.out.println(processos);
+        mv.addObject("processos", processos);
+        mv.addObject("modoEdicao", false);
+        mv.setViewName("listar");
+        return mv;
     }
 
     @GetMapping("/criar")
@@ -43,9 +46,10 @@ public class ProcessoController {
 
     @GetMapping("/{id}")
     public ModelAndView buscarPorId(@PathVariable Long id) {
-        ModelAndView mv = new ModelAndView("processos/card");
+        ModelAndView mv = new ModelAndView("fragments/card");
         Processo processo = processoService.findById(id);
         if (processo != null) {
+            mv.addObject("modoEdicao", true);
             mv.addObject("processo", processo);
         } else {
             mv.setViewName("redirect:/formulario");
@@ -67,12 +71,17 @@ public class ProcessoController {
     }
 
     @PostMapping("/atualizar/{id}")
-    public String atualizar(@PathVariable Long id, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura, @RequestParam String status, @RequestParam String atualizacao) {
+    public String atualizar(@PathVariable Long id, @RequestParam String status, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura, @RequestParam String atualizacao, Model model) {
         Processo processo = processoService.findById(id);
         if (processo != null) {
-            if(atualizacao.equals("atualizarStatus")){
+            if (atualizacao.equals("abrirCard")){
+                model.addAttribute("modoEdicao", true);
+                return "redirect:/processos/{id}";
+            } else if (atualizacao.equals("excluirProcesso")){
+                model.addAttribute("modoEdicao", false);
+            }
+            else {
                 processo.setStatus(status);
-            } else {
                 processo.setDescricao(descricao);
                 processo.setTipoContratacao(tipoContratacao);
                 processo.setFormaCandidatura(formaCandidatura);
@@ -81,7 +90,7 @@ public class ProcessoController {
         } else {
             return "redirect:/processos";
         }
-        return "redirect:/processos/{id}";
+        return "redirect:/processos/listar";
     }
 
     @GetMapping("/excluir/{id}")
