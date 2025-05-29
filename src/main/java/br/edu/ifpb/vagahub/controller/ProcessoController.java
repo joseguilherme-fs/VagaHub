@@ -76,7 +76,9 @@ public class ProcessoController {
                 model.addAttribute("modoEdicao", true);
                 return "redirect:/processos/{id}";
             } else if (atualizacao.equals("excluirProcesso")){
+                processoService.deleteById(id);
                 model.addAttribute("modoEdicao", false);
+                return "redirect:/processos/listar";
             }
             else {
                 processo.setStatus(status);
@@ -89,11 +91,5 @@ public class ProcessoController {
             return "redirect:/processos";
         }
         return "redirect:/processos/listar";
-    }
-
-    @GetMapping("/excluir/{id}")
-    public String deletar(@PathVariable Long id) {
-        processoService.deleteById(id);
-        return "redirect:/processos";
     }
 }
