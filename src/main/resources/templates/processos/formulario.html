@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/formulario.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <title>Cadastro de Processo Seletivo</title>
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<main>
+    <form class="formulario candidatura" th:object="${processo}" th:action="@{/processos}" method="post">
+        <div class="registro-candidatura" style="display: flex;">
+            <h1>Registre uma nova candidatura</h1>
+            <div class="stepper">
+                <div class="step atual">
+                    <div class="step-icon atual"><i class="fa-solid fa-address-card"></i></div>
+                    <p class="step-nome">Candidatura</p>
+                </div>
+                <div class="linha"></div>
+                <div class="step">
+                    <div class="step-icon"><i class="fa-solid fa-bell"></i></div>
+                    <p class="step-nome">Lembretes</p>
+                </div>
+                <div class="linha"></div>
+                <div class="step">
+                    <div class="step-icon"><i class="fa-solid fa-check"></i></div>
+                    <p class="step-nome">Confirmação</p>
+                </div>
+            </div>
+
+            <label for="campoTitulo" class="label-input">Título:</label>
+            <input id="campoTitulo" th:field="*{titulo}" class="campo" type="text" required>
+
+            <label for="campoEmpresa" class="label-input">Nome da Empresa:</label>
+            <input type="text" id="campoEmpresa" name="campoEmpresa" class="campo" required>
+
+            <label for="campoDescricao" class="label-input">Descrição da candidatura:</label>
+            <textarea id="campoDescricao" th:field="*{descricao}" class="campo descricao" rows="6" required></textarea>
+
+            <label for="campoAreaAtuacao" class="label-input">Área de atuação:</label>
+            <input id="campoAreaAtuacao" th:field="*{areaAtuacao}" class="campo" type="text" required>
+
+            <label for="campoTipoContratacao" class="label-input">Tipo de contratação:</label>
+            <select id="campoTipoContratacao" class="form-select" th:field="*{tipoContratacao}" required>
+                <option hidden selected value=""></option>
+                <option value="CLT">CLT</option>
+                <option value="PJ">PJ</option>
+                <option value="Estagiário">Estagiário</option>
+                <option value="Estatutário">Estatutário</option>
+            </select>
+
+            <label for="campoFormaCandidatura" class="label-input">Forma de candidatura:</label>
+            <select id="campoFormaCandidatura" class="form-select" th:field="*{formaCandidatura}" required>
+                <option hidden selected value=""></option>
+                <option value="Concurso">Concurso</option>
+                <option value="E-mail">E-mail</option>
+                <option value="Portal de Vagas">Portal de Vagas</option>
+            </select>
+
+            <label for="campoModeloAtuacao" class="label-input">Modelo de atuação:</label>
+            <select id="campoModeloAtuacao" class="form-select" th:field="*{modeloDeAtuacao}" required>
+                <option hidden selected value=""></option>
+                <option value="Presencial">Presencial</option>
+                <option value="Home-Office">Home-Office</option>
+                <option value="Híbrido">Híbrido</option>
+            </select>
+
+            <ul class="local-candidatura">
+                <li>
+                    <label for="campoEstado" class="label-input">Estado:</label>
+                    <select id="campoEstado" class="form-select" th:field="*{estadoVaga}" required>
+                        <option hidden selected value=""></option>
+                        <option value="PB">PB</option>
+                        <option value="SP">SP</option>
+                    </select>
+                </li>
+                <li>
+                    <label for="campoCidade" class="label-input">Cidade:</label>
+                    <select id="campoCidade" class="form-select" th:field="*{cidadeVaga}" required>
+                        <option hidden selected value=""></option>
+                        <option value="João Pessoa">João Pessoa</option>
+                        <option value="São Paulo">São Paulo</option>
+                    </select>
+                </li>
+            </ul>
+
+            <label for="campoHabilidades" class="label-input">Habilidades para essa vaga (separadas por vírgula):</label>
+            <textarea id="campoHabilidades" name="campoHabilidades" class="campo" rows="3" cols="40" required></textarea>
+
+            <button type="button" id="btn-proximo-candidatura" class="botao proximo">Próximo</button>
+        </div>
+
+        <div class="configuracao-lembrete" style="display: none;">
+            <h1>Configure seus lembretes</h1>
+            <div class="stepper">
+                <div class="step">
+                    <div class="step-icon"><i class="fa-solid fa-address-card"></i></div>
+                    <p class="step-nome">Candidatura</p>
+                </div>
+                <div class="linha"></div>
+                <div class="step atual">
+                    <div class="step-icon atual"><i class="fa-solid fa-bell"></i></div>
+                    <p class="step-nome">Lembretes</p>
+                </div>
+                <div class="linha"></div>
+                <div class="step">
+                    <div class="step-icon"><i class="fa-solid fa-check"></i></div>
+                    <p class="step-nome">Confirmação</p>
+                </div>
+            </div>
+
+
+            <label for="campoLembretes" class="label-input">Receber lembretes:</label>
+            <ul id="campoLembretes" class="receber-lembretes">
+                <li>
+                    <input id="campoPorSemana" name="receber-lembretes" type="radio" value="por-semana" onchange="atualizarVisibilidade()" checked required>
+                    <label for="campoPorSemana">Por semana</label>
+                </li>
+                <li>
+                    <input id="campoDatasEspecificas" name="receber-lembretes" type="radio" value="datas-especificas" onchange="atualizarVisibilidade()">
+                    <label for="campoDatasEspecificas">Em datas específicas</label>
+                </li>
+            </ul>
+
+            <div class="por-semana">
+                <label for="campoHorario" class="label-input">Horário do lembrete:</label>
+                <input id="campoHorario" class="campo" type="time" required>
+            </div>
+
+            <div class="datas-especificas">
+                <label class="label-input">Lembrete 1:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+
+
+                <label class="label-input">Lembrete 2:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+
+                <label class="label-input">Lembrete 3:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+
+                <label class="label-input">Lembrete 4:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+
+                <label class="label-input">Lembrete 5:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="btn-voltar-lembrete" class="botao voltar">Voltar</button>
+            <button type="button" id="btn-proximo-lembrete" class="botao proximo">Próximo</button>
+
+        </div>
+
+        <div class="finalizar-candidatura" style="display: none;">
+            <h1>Finalizar candidatura</h1>
+            <div class="stepper">
+                <div class="step">
+                    <div class="step-icon"><i class="fa-solid fa-address-card"></i></div>
+                    <p class="step-nome">Candidatura</p>
+                </div>
+                <div class="linha"></div>
+                <div class="step">
+                    <div class="step-icon"><i class="fa-solid fa-bell"></i></div>
+                    <p class="step-nome">Lembretes</p>
+                </div>
+                <div class="linha"></div>
+                <div class="step atual">
+                    <div class="step-icon atual"><i class="fa-solid fa-check"></i></div>
+                    <p class="step-nome">Confirmação</p>
+                </div>
+            </div>
+
+            <h2>Tudo certo!</h2>
+            <i id="icone-finalizado" class="fa-solid fa-circle-check"></i>
+            <p id="subtitulo-finalizado">
+                Todas as informações foram preenchidas. Abaixo você pode voltar para revisar os dados ou confirmar sua candidatura.
+            </p>
+            <button type="button" id="btn-voltar-finalizar" class="botao voltar">Voltar</button>
+            <button type="submit" id="confirmar-candidatura" class="botao proximo">Confirmar candidatura</button>
+        </div>
+    </form>
+</main>
+
+<script th:src="@{/js/formulario.js}"></script>
+</body>
+</html>

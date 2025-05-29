@@ -1,0 +1,37 @@
+#header-fragment {
+    background-color: #3c58b1;
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo {
+    text-decoration: none;
+    color: #ffffff;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 10pt;
+}
+
+.btn-nova-candidatura {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border-radius: 25px;
+    padding: 5px 7px;
+    color: #ffffff;
+    font-size: 12pt;
+    text-decoration: none;
+    transition: 0.5s;
+    gap: 5px;
+}
+
+.btn-nova-candidatura:hover {
+    background-color: #ffffff;
+    color: #3c58b1;
+    transition: 0.5s;
+}
