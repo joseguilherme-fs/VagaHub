@@ -21,7 +21,7 @@ public class Processo {
     private String titulo;
 
     @Column(nullable = false)
-    private String status = "Em andamento";
+    private String status = "Em Andamento";
 
     @Column(nullable = false)
     private String descricao;
