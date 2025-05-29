@@ -8,6 +8,7 @@
     <title>Cadastro de Processo Seletivo</title>
 </head>
 <body>
+<div th:insert="fragments/header :: header"></div>
 <main>
     <form class="formulario candidatura" th:object="${processo}" th:action="@{/processos}" method="post">
         <div class="registro-candidatura" style="display: flex;">
