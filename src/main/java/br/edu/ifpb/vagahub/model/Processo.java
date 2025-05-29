@@ -26,7 +26,7 @@ public class Processo {
     @Column(nullable = false)
     private String descricao;
 
-    private String linkVaga;
+//    private String linkVaga;
 
     @Column(nullable = false)
     private String areaAtuacao;
