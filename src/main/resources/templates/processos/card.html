@@ -12,7 +12,7 @@
 
     <form class="card" th:object="${processo}" th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">
         <div class="dropdown">
-            <!--            <span id="status-indicator" th:style="'background-color: ' + *{statusColor}"></span>-->
+            <span id="status-indicator"></span>
             <div class="select-container">
                 <select class="styled-select" id="status-select" th:field="*{status}">
                     <option value="Em Andamento">Em Andamento</option>
@@ -27,13 +27,13 @@
 
         <!-- Conteúdo do card (somente leitura) -->
 
-        <div class="info-group">
+        <div class="input-group">
             <label for="descricao-processo">Descrição da Candidatura:</label>
             <input id="descricao-processo" th:field="*{descricao}" type="text">
             <p th:text="${processo.descricao}"></p>
         </div>
 
-        <div class="info-group">
+        <div class="input-group">
             <label for="select-tipo-contratacao">Modelo de Contratação:</label>
             <select class="styled-select" id="select-tipo-contratacao" th:field="*{tipoContratacao}">
                 <option value="CLT">CLT</option>
@@ -45,7 +45,7 @@
             <p th:text="${processo.tipoContratacao}"></p>
         </div>
 
-        <div class="info-group">
+        <div class="input-group">
             <label for="forma-candidatura">Forma de Candidatura:</label>
             <input id="forma-candidatura" th:field="*{formaCandidatura}" type="text" >
             <p th:text="${processo.formaCandidatura}"></p>
@@ -53,7 +53,7 @@
 
 
         <!-- Botões de ação -->
-        <div class="card-actions">
+        <div class="buttons">
             <button type="button" class="btn-edit" th:onclick="'editarProcesso()'">
                 <i class="fas fa-edit"></i> Editar
             </button>

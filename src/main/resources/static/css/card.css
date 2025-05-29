@@ -22,6 +22,12 @@ body {
     text-align: center;
 }
 
+.card-actions{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 .dropdown {
     display: flex;
     align-items: center;
@@ -86,8 +92,6 @@ body {
     box-shadow: 0 0 5px rgba(167, 139, 250, 0.5);
 }
 
-
-
 h1 {
     font-size: 18px;
     margin-bottom: 20px;
@@ -96,12 +100,20 @@ h1 {
 
 .input-group {
     margin-bottom: 15px;
+}
 
+.input-group p {
+    padding: 10px;
+    background-color: #d6d6d6;
+    font-size: 16px;
+    color: #3c3c3c;
+    text-align: left;
+    border-radius: 5px;
 }
 
 .input-group label {
     display: block;
-    font-size: 12px;
+    font-size: 15px;
     color: #666;
     margin-bottom: 5px;
     text-align: left;
@@ -112,7 +124,7 @@ h1 {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .buttons {
@@ -128,15 +140,7 @@ h1 {
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    color: #fff;
-}
-
-.edit {
-    background-color: #BBBBF3;
-}
-
-.delete {
-    background-color: #BBBBF3;
+    color: #3c3c3c;
 }
 
 /* Estilos do Modal */
@@ -187,7 +191,7 @@ h1 {
     background-color: #9999F0;
 }
 
-.info-group input {
+.input-group input {
     display: none;
 }
 
@@ -197,8 +201,18 @@ h1 {
 
 .btn-save {
     display: none;
+    background-color: #a1fa89;
+}
+
+.btn-delete {
+    background-color: #fa8989;
+}
+
+.btn-edit {
+    background-color: #BBBBF3;
 }
 
 .btn-cancel-edit {
     display: none;
+    background-color: #BBBBF3;
 }

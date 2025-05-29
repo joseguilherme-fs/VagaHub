@@ -4,13 +4,13 @@ function updateIndicatorColor() {
     const indicator = document.getElementById('status-indicator');
 
     switch (select.value) {
-        case 'em-andamento':
+        case 'Em Andamento':
             indicator.style.backgroundColor = '#FFFF6E'; // Amarelo
             break;
-        case 'banco-de-talentos':
+        case 'Banco de Talentos':
             indicator.style.backgroundColor = '#8BEDB5'; // Verde
             break;
-        case 'finalizado':
+        case 'Finalizado':
             indicator.style.backgroundColor = '#7490EB'; // Azul
             break;
         default:
@@ -20,11 +20,11 @@ function updateIndicatorColor() {
 
 // Funções de edição do processo
 function editarProcesso() {
-    document.querySelectorAll(".info-group input").forEach(input => {
+    document.querySelectorAll(".input-group input").forEach(input => {
         input.style.display = "block";
     });
     document.querySelector("#select-tipo-contratacao").style.display = "block";
-    document.querySelectorAll(".info-group p").forEach(info => {
+    document.querySelectorAll(".input-group p").forEach(info => {
         info.style.display = "none";
     });
     document.querySelector(".btn-edit").style.display = "none";
@@ -34,11 +34,11 @@ function editarProcesso() {
 }
 
 function cancelarEdicao() {
-    document.querySelectorAll(".info-group input").forEach(input => {
+    document.querySelectorAll(".input-group input").forEach(input => {
         input.style.display = "none";
     });
     document.querySelector("#select-tipo-contratacao").style.display = "none";
-    document.querySelectorAll(".info-group p").forEach(info => {
+    document.querySelectorAll(".input-group p").forEach(info => {
         info.style.display = "block";
     });
     document.querySelector(".btn-edit").style.display = "block";
