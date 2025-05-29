@@ -2,12 +2,13 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" th:href="@{/css/header.css}">
         <title>VagaHub</title>
     </head>
     <body>
-        <header id="header-fragment" th:fragment="header" style="background-color: #3c58b1; color: #ffffff; display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 10px;">
-            <h1 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: 21pt;">VagaHub</h1>
-            <button style="background-color: transparent; border: 0; color: #ffffff; font-size: 18pt;"><i class="fa-solid fa-bars"></i></button>
+        <header id="header-fragment" th:fragment="header">
+            <h1>VagaHub</h1>
+            <button><i class="fa-solid fa-bars"></i></button>
         </header>
     </body>
 </html>
