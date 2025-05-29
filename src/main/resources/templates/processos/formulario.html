@@ -32,8 +32,8 @@
             <label for="campoTitulo" class="label-input">Título:</label>
             <input id="campoTitulo" th:field="*{titulo}" class="campo" type="text" required>
 
-            <label for="nomeEmpresa" class="label-input">Nome da Empresa:</label>
-            <input type="text" id="nomeEmpresa" name="nomeEmpresa" class="campo" required>
+            <label for="campoEmpresa" class="label-input">Nome da Empresa:</label>
+            <input type="text" id="campoEmpresa" name="campoEmpresa" class="campo" required>
 
             <label for="campoDescricao" class="label-input">Descrição da candidatura:</label>
             <textarea id="campoDescricao" th:field="*{descricao}" class="campo descricao" rows="6" required></textarea>
@@ -42,20 +42,13 @@
             <input id="campoAreaAtuacao" th:field="*{areaAtuacao}" class="campo" type="text" required>
 
             <label for="campoTipoContratacao" class="label-input">Tipo de contratação:</label>
-            <ul id="campoTipoContratacao" class="tipo-contratacao">
-                <li>
-                    <input id="campoContratoClt" th:field="*{tipoContratacao}" type="radio" value="CLT" required>
-                    <label for="campoContratoClt">CLT</label>
-                </li>
-                <li>
-                    <input id="campoContratoPj" th:field="*{tipoContratacao}" type="radio" value="PJ">
-                    <label for="campoContratoPj">PJ</label>
-                </li>
-                <li>
-                    <input id="campoContratoEstatutario" th:field="*{tipoContratacao}" type="radio" value="Estatutário">
-                    <label for="campoContratoEstatutario">Estatutário</label>
-                </li>
-            </ul>
+            <select id="campoTipoContratacao" class="form-select" th:field="*{tipoContratacao}" required>
+                <option hidden selected value=""></option>
+                <option value="CLT">CLT</option>
+                <option value="PJ">PJ</option>
+                <option value="Estagiário">Estagiário</option>
+                <option value="Estatutário">Estatutário</option>
+            </select>
 
             <label for="campoFormaCandidatura" class="label-input">Forma de candidatura:</label>
             <select id="campoFormaCandidatura" class="form-select" th:field="*{formaCandidatura}" required>
@@ -92,8 +85,8 @@
                 </li>
             </ul>
 
-            <label for="nomesHabilidades" class="label-input">Habilidades para essa vaga (separadas por vírgula):</label>
-            <textarea id="nomesHabilidades" name="nomesHabilidades" class="campo" rows="3" cols="40" required></textarea>
+            <label for="campoHabilidades" class="label-input">Habilidades para essa vaga (separadas por vírgula):</label>
+            <textarea id="campoHabilidades" name="campoHabilidades" class="campo" rows="3" cols="40" required></textarea>
 
             <button type="button" id="btn-proximo-candidatura" class="botao proximo">Próximo</button>
         </div>
@@ -117,70 +110,70 @@
                 </div>
             </div>
 
-            <form class="formulario lembrete">
-                <label for="campoLembretes" class="label-input">Receber lembretes:</label>
-                <ul id="campoLembretes" class="receber-lembretes">
-                    <li>
-                        <input id="campoPorSemana" name="receber-lembretes" type="radio" value="por-semana" onchange="atualizarVisibilidade()" checked required>
-                        <label for="campoPorSemana">Por semana</label>
-                    </li>
-                    <li>
-                        <input id="campoDatasEspecificas" name="receber-lembretes" type="radio" value="datas-especificas" onchange="atualizarVisibilidade()">
-                        <label for="campoDatasEspecificas">Em datas específicas</label>
-                    </li>
-                </ul>
 
-                <div class="por-semana">
-                    <label for="campoHorario" class="label-input">Horário do lembrete:</label>
-                    <input id="campoHorario" class="campo" type="time" required>
+            <label for="campoLembretes" class="label-input">Receber lembretes:</label>
+            <ul id="campoLembretes" class="receber-lembretes">
+                <li>
+                    <input id="campoPorSemana" name="receber-lembretes" type="radio" value="por-semana" onchange="atualizarVisibilidade()" checked required>
+                    <label for="campoPorSemana">Por semana</label>
+                </li>
+                <li>
+                    <input id="campoDatasEspecificas" name="receber-lembretes" type="radio" value="datas-especificas" onchange="atualizarVisibilidade()">
+                    <label for="campoDatasEspecificas">Em datas específicas</label>
+                </li>
+            </ul>
+
+            <div class="por-semana">
+                <label for="campoHorario" class="label-input">Horário do lembrete:</label>
+                <input id="campoHorario" class="campo" type="time" required>
+            </div>
+
+            <div class="datas-especificas">
+                <label class="label-input">Lembrete 1:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
                 </div>
 
-                <div class="datas-especificas">
-                    <label class="label-input">Lembrete 1:</label>
-                    <div>
-                        <label>
-                            <input class="campo esquerdo" type="text">
-                            <input class="campo direito" type="date" min="">
-                        </label>
-                    </div>
 
-
-                    <label class="label-input">Lembrete 2:</label>
-                    <div>
-                        <label>
-                            <input class="campo esquerdo" type="text">
-                            <input class="campo direito" type="date" min="">
-                        </label>
-                    </div>
-
-                    <label class="label-input">Lembrete 3:</label>
-                    <div>
-                        <label>
-                            <input class="campo esquerdo" type="text">
-                            <input class="campo direito" type="date" min="">
-                        </label>
-                    </div>
-
-                    <label class="label-input">Lembrete 4:</label>
-                    <div>
-                        <label>
-                            <input class="campo esquerdo" type="text">
-                            <input class="campo direito" type="date" min="">
-                        </label>
-                    </div>
-
-                    <label class="label-input">Lembrete 5:</label>
-                    <div>
-                        <label>
-                            <input class="campo esquerdo" type="text">
-                            <input class="campo direito" type="date" min="">
-                        </label>
-                    </div>
+                <label class="label-input">Lembrete 2:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
                 </div>
 
-                <button type="button" id="btn-voltar-lembrete" class="botao voltar">Voltar</button>
-                <button id="btn-proximo-lembrete" class="botao proximo">Próximo</button>
-            </form>
+                <label class="label-input">Lembrete 3:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+
+                <label class="label-input">Lembrete 4:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+
+                <label class="label-input">Lembrete 5:</label>
+                <div>
+                    <label>
+                        <input class="campo esquerdo" type="text">
+                        <input class="campo direito" type="date" min="">
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="btn-voltar-lembrete" class="botao voltar">Voltar</button>
+            <button type="button" id="btn-proximo-lembrete" class="botao proximo">Próximo</button>
+
         </div>
 
         <div class="finalizar-candidatura" style="display: none;">
@@ -207,12 +200,8 @@
             <p id="subtitulo-finalizado">
                 Todas as informações foram preenchidas. Abaixo você pode voltar para revisar os dados ou confirmar sua candidatura.
             </p>
-
-
-            <form class="formulario">
-                <button type="button" id="btn-voltar-finalizar" class="botao voltar">Voltar</button>
-                <button type="submit" id="confirmar-candidatura" class="botao proximo">Confirmar candidatura</button>
-            </form>
+            <button type="button" id="btn-voltar-finalizar" class="botao voltar">Voltar</button>
+            <button type="submit" id="confirmar-candidatura" class="botao proximo">Confirmar candidatura</button>
         </div>
     </form>
 </main>

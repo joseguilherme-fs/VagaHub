@@ -57,11 +57,11 @@ public class ProcessoController {
     @PostMapping
     public String criar(
             @ModelAttribute Processo processo,
-            @RequestParam("nomeEmpresa") String nomeEmpresa,
-            @RequestParam("nomesHabilidades") String nomesHabilidades
+            @RequestParam("campoEmpresa") String campoEmpresa,
+            @RequestParam("campoHabilidades") String campoHabilidades
     ) {
 
-        processoService.criar(processo, nomeEmpresa, nomesHabilidades);
+        processoService.criar(processo, campoEmpresa, campoHabilidades);
 
         return "redirect:/processos";
     }

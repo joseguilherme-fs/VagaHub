@@ -29,12 +29,23 @@ ul {
     font-size: 18pt;
 }
 
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.candidatura {
+    max-width: 425px;
+}
+
 .registro-candidatura, .configuracao-lembrete, .finalizar-candidatura {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    width: 100%;
 }
 
 main h1 {
