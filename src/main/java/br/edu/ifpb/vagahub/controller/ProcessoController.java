@@ -67,12 +67,16 @@ public class ProcessoController {
     }
 
     @PostMapping("/atualizar/{id}")
-    public String atualizar(@PathVariable Long id, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura) {
+    public String atualizar(@PathVariable Long id, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura, @RequestParam String status, @RequestParam String atualizacao) {
         Processo processo = processoService.findById(id);
         if (processo != null) {
-            processo.setDescricao(descricao);
-            processo.setTipoContratacao(tipoContratacao);
-            processo.setFormaCandidatura(formaCandidatura);
+            if(atualizacao.equals("atualizarStatus")){
+                processo.setStatus(status);
+            } else {
+                processo.setDescricao(descricao);
+                processo.setTipoContratacao(tipoContratacao);
+                processo.setFormaCandidatura(formaCandidatura);
+            }
             processoService.save(processo);
         } else {
             return "redirect:/processos";

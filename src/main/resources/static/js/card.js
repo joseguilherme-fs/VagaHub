@@ -1,3 +1,4 @@
+
 // Funções de controle de status (indicador de cor)
 function updateIndicatorColor() {
     const select = document.getElementById('status-select');
@@ -5,10 +6,10 @@ function updateIndicatorColor() {
 
     switch (select.value) {
         case 'Em Andamento':
-            indicator.style.backgroundColor = '#FFFF6E'; // Amarelo
+            indicator.style.backgroundColor = '#8BEDB5'; // Verde
             break;
         case 'Banco de Talentos':
-            indicator.style.backgroundColor = '#8BEDB5'; // Verde
+            indicator.style.backgroundColor = '#FFFF6E'; // Amarelo
             break;
         case 'Finalizado':
             indicator.style.backgroundColor = '#7490EB'; // Azul
@@ -19,7 +20,7 @@ function updateIndicatorColor() {
 }
 
 // Funções de edição do processo
-function editarProcesso() {
+function habilitarEdicao() {
     document.querySelectorAll(".input-group input").forEach(input => {
         input.style.display = "block";
     });
@@ -45,6 +46,10 @@ function cancelarEdicao() {
     document.querySelector(".btn-delete").style.display = "block";
     document.querySelector(".btn-save").style.display = "none";
     document.querySelector(".btn-cancel-edit").style.display = "none";
+}
+
+function mostrarBotaoSalvarStatus(){
+    document.querySelector(".btn-update-status").style.display = "block";
 }
 
 // Funções de exclusão (modal e ação)
@@ -73,17 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (select) {
         select.addEventListener('change', updateIndicatorColor);
         updateIndicatorColor(); // Inicializa a cor
-    }
-
-    // Configuração dos botões de edição
-    const btnEdit = document.querySelector(".btn-edit");
-    if (btnEdit) {
-        btnEdit.addEventListener('click', editarProcesso);
-    }
-
-    const btnCancelEdit = document.querySelector(".btn-cancel-edit");
-    if (btnCancelEdit) {
-        btnCancelEdit.addEventListener('click', cancelarEdicao);
     }
 
     // Configuração dos modais de exclusão (unificando os modais)
