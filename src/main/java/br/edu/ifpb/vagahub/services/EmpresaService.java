@@ -46,6 +46,4 @@ public class EmpresaService {
     public List<Empresa> findAll() {
         return repository.findAll();
     }
-
-
 }

@@ -25,11 +25,13 @@ public class ProcessoController {
     @Autowired
     private HabilidadeRepository habilidadeRepository;
 
-    @GetMapping
-    public String listarTodos(Model model) {
+    @GetMapping("/listar")
+    public ModelAndView listarTodos(ModelAndView mv) {
         List<Processo> processos = processoService.findAll();
-        model.addAttribute("processos", processos);
-        return "processos/lista";
+        mv.addObject("processos", processos);
+        mv.addObject("modoEdicao", false);
+        mv.setViewName("/processos/listar");
+        return mv;
     }
 
     @GetMapping("/criar")
@@ -43,53 +45,51 @@ public class ProcessoController {
 
     @GetMapping("/{id}")
     public ModelAndView buscarPorId(@PathVariable Long id) {
-        ModelAndView mv = new ModelAndView("processos/detalhes");
+        ModelAndView mv = new ModelAndView("fragments/card");
         Processo processo = processoService.findById(id);
         if (processo != null) {
+            mv.addObject("modoEdicao", true);
             mv.addObject("processo", processo);
         } else {
-            mv.setViewName("redirect:/processos");
+            mv.setViewName("redirect:/formulario");
         }
         return mv;
     }
-
 
     @PostMapping
     public String criar(
             @ModelAttribute Processo processo,
-            @RequestParam("nomeEmpresa") String nomeEmpresa,
-            @RequestParam("nomesHabilidades") String nomesHabilidades
+            @RequestParam("campoEmpresa") String campoEmpresa,
+            @RequestParam("campoHabilidades") String campoHabilidades
     ) {
 
-        processoService.criar(processo, nomeEmpresa, nomesHabilidades);
+        processoService.criar(processo, campoEmpresa, campoHabilidades);
 
         return "redirect:/processos";
     }
 
-
-    @GetMapping("/editar/{id}")
-    public ModelAndView editar(@PathVariable Long id) {
-        ModelAndView mv = new ModelAndView("processos/formulario");
-       Processo processo = processoService.findById(id);
+    @PostMapping("/atualizar/{id}")
+    public String atualizar(@PathVariable Long id, @RequestParam String status, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura, @RequestParam String atualizacao, Model model) {
+        Processo processo = processoService.findById(id);
         if (processo != null) {
-            mv.addObject("processo", processo);
-            mv.addObject("empresas", empresaRepository.findAll());
-            mv.addObject("habilidades", habilidadeRepository.findAll());
+            if (atualizacao.equals("abrirCard")){
+                model.addAttribute("modoEdicao", true);
+                return "redirect:/processos/{id}";
+            } else if (atualizacao.equals("excluirProcesso")){
+                processoService.deleteById(id);
+                model.addAttribute("modoEdicao", false);
+                return "redirect:/processos/listar";
+            }
+            else {
+                processo.setStatus(status);
+                processo.setDescricao(descricao);
+                processo.setTipoContratacao(tipoContratacao);
+                processo.setFormaCandidatura(formaCandidatura);
+            }
+            processoService.save(processo);
         } else {
-            mv.setViewName("redirect:/processos");
+            return "redirect:/processos";
         }
-        return mv;
-    }
-
-    @PostMapping("/atualizar")
-    public String atualizar(@ModelAttribute Processo processoAtualizado) {
-        processoService.save(processoAtualizado);
-        return "redirect:/processos";
-    }
-
-    @GetMapping("/excluir/{id}")
-    public String deletar(@PathVariable Long id) {
-        processoService.deleteById(id);
-        return "redirect:/processos";
+        return "redirect:/processos/listar";
     }
 }

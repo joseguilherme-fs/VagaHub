@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" th:href="@{/css/header.css}">
+        <title>VagaHub</title>
+    </head>
+    <body>
+        <header id="header-fragment" th:fragment="header">
+            <a class="logo" th:href="@{/processos/listar}">
+                <h1>VagaHub</h1>
+            </a>
+
+            <a class="btn-nova-candidatura" th:href="@{/processos/criar}">
+                Nova Candidatura <i class="fa-solid fa-plus"></i>
+            </a>
+
+
+        </header>
+    </body>
+</html>
