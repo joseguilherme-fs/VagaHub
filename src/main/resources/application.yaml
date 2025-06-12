@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: vagahub
+
+  datasource:
+    url: jdbc:postgresql://db.ltxirhpthtdftixmtplq.supabase.co:5432/postgres
+    username: postgres
+    password: GLSVagahub2025
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+supabase:
+    projectId: yourProjectId
+    anonKey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0eGlyaHB0aHRkZnRpeG10cGxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1MjQ5NTAsImV4cCI6MjA2MzEwMDk1MH0.QQ-vS0PhAWmyTtYu2ar1UNM_5ZrKAdkwnYt2fBA4wp0
+    jwtSecret: HtyAKpflLTUtfvBkDqFjK7Zp45s2+FgoDliJ9Wd8mppOJPHHbCaZ0d6F0YVpvpCou6bnrgyB2b0QeAxuC9u6cg==
+    successfulLoginRedirectPage: "/account"
+    passwordRecoveryPage: /updatePassword
+    unauthenticatedPage: /unauthenticated
+    unauthorizedPage: /unauthorizedPage
+    sslOnly: false
+
+    database:
+      host: "https://ltxirhpthtdftixmtplq.supabase.co"
+      password: "GLSVagahub2025"
+
+    public:
+      get:
+        - "/unauthenticated"
+        - "/unauthorized"
+        - "/api/user/logout"
+      post:
+        - "/api/user/signup"
+        - "/api/user/signInWithMagicLink"
+        - "/api/user/login"
+        - "/api/user/jwt"
+        - "/api/user/sendPasswordResetEmail"
+
+
+
+
