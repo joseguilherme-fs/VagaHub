@@ -8,6 +8,6 @@ public class RedirectController {
 
     @GetMapping("/")
     public String redirectToHome() {
-        return "/home";
+        return "home";
     }
 }
