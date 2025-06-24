@@ -30,7 +30,7 @@ public class ProcessoController {
         List<Processo> processos = processoService.findAll();
         mv.addObject("processos", processos);
         mv.addObject("modoEdicao", false);
-        mv.setViewName("/processos/listar");
+        mv.setViewName("processos/listar");
         return mv;
     }
 
@@ -51,7 +51,7 @@ public class ProcessoController {
             mv.addObject("modoEdicao", true);
             mv.addObject("processo", processo);
         } else {
-            mv.setViewName("redirect:/formulario");
+            mv.setViewName("redirect:formulario");
         }
         return mv;
     }
@@ -78,7 +78,7 @@ public class ProcessoController {
             } else if (atualizacao.equals("excluirProcesso")){
                 processoService.deleteById(id);
                 model.addAttribute("modoEdicao", false);
-                return "redirect:/processos/listar";
+                return "redirect:processos/listar";
             }
             else {
                 processo.setStatus(status);
@@ -88,8 +88,8 @@ public class ProcessoController {
             }
             processoService.save(processo);
         } else {
-            return "redirect:/processos";
+            return "redirect:processos";
         }
-        return "redirect:/processos/listar";
+        return "redirect:processos/listar";
     }
 }
