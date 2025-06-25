@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class ProcessoController {
         return "redirect:/processos";
     }
 
-    @PostMapping("/atualizar/{id}")
+    /*@PostMapping("/atualizar/{id}")
     public String atualizar(@PathVariable Long id, @RequestParam String status, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura, @RequestParam String atualizacao, Model model) {
         Processo processo = processoService.findById(id);
         if (processo != null) {
@@ -91,5 +92,39 @@ public class ProcessoController {
             return "redirect:processos";
         }
         return "redirect:processos/listar";
+    }*/
+    // Atualização do método "atualizar"
+    @PostMapping("/atualizar/{id}")
+    public String atualizar(
+            @PathVariable Long id,
+            @RequestParam String status,
+            @RequestParam String descricao,
+            @RequestParam String tipoContratacao,
+            @RequestParam String formaCandidatura,
+            @RequestParam String atualizacao,
+            RedirectAttributes redirectAttributes) {
+
+        Processo processo = processoService.findById(id);
+        if (processo != null) {
+            if (atualizacao.equals("abrirCard")) {
+                return "redirect:/processos/" + id;
+            } else if (atualizacao.equals("excluirProcesso")) {
+                processoService.deleteById(id);
+                redirectAttributes.addFlashAttribute("mensagemSucesso", "Candidatura excluída com sucesso!");
+                return "redirect:/processos/listar";
+            } else {
+                processo.setStatus(status);
+                processo.setDescricao(descricao);
+                processo.setTipoContratacao(tipoContratacao);
+                processo.setFormaCandidatura(formaCandidatura);
+                processoService.save(processo);
+
+                // Adicionando mensagem flash de sucesso
+                redirectAttributes.addFlashAttribute("mensagemSucesso", "Alterações salvas com sucesso!");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao atualizar o processo.");
+        }
+        return "redirect:/processos/listar";
     }
 }

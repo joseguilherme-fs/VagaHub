@@ -222,3 +222,48 @@
     background-color: transparent;
     border: none;
 }
+
+#mensagemSucesso {
+    position: fixed; /* Fixa a mensagem na tela */
+    top: 20px; /* Distância do topo */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta para o centro */
+    z-index: 9999; /* Garante que fique acima de outros elementos */
+    background-color: #d1e7dd; /* Verde pastel */
+    color: #0f5132; /* Texto verde escuro */
+    border: 1px solid #badbcc; /* Borda verde claro */
+    padding: 15px 25px; /* Espaçamento interno */
+    border-radius: 8px; /* Cantos arredondados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    font-size: 16px; /* Tamanho do texto */
+    font-family: 'Arial', sans-serif; /* Tipografia suave */
+    text-align: center; /* Centraliza o texto */
+    font-weight: bold; /* Negrito */
+    animation: slideDown 0.5s ease, fadeOut 0.5s ease 3s; /* Animação de entrada e saída */
+    opacity: 0; /* Padrão escondido */
+    visibility: hidden; /* Padrão escondido */
+}
+
+/* Animação de deslizar para baixo */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -30%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+        visibility: visible;
+    }
+}
+
+/* Animação de fade-out */
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
