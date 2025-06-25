@@ -16,6 +16,14 @@
         <div class="card-processo" th:each="processo : ${processos}">
             <div th:replace="fragments/card :: card(${processo})"></div>
         </div>
+        <!-- Adicione isso no início da página de listagem -->
+        <div  id="mensagemSucesso" th:if="${mensagemSucesso}" class="alert alert-success" role="alert">
+            <p th:text="${mensagemSucesso}"></p>
+        </div>
+
+        <div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
+            <p th:text="${mensagemErro}"></p>
+        </div>
     </main>
 
 <script th:src="@{/js/card.js}"></script>
