@@ -19,7 +19,6 @@
             Nova Candidatura <i class="fa-solid fa-plus"></i>
         </a>
 
-        <!-- Botão de usuário -->
         <div class="usuario-area" th:if="${session.usuarioLogado != null}">
             <button class="usuario-dropdown" onclick="toggleMenu()" type="button">
                 <i class="fa-solid fa-user"></i>
@@ -32,7 +31,6 @@
             </div>
         </div>
 
-        <!-- Botão entrar se não estiver logado -->
         <a class="usuario-dropdown" th:if="${session.usuarioLogado == null}" th:href="@{/login}">
             <i class="fa-solid fa-user"></i>
             <span>Entrar</span>
