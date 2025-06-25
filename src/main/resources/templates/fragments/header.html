@@ -1,21 +1,58 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" th:href="@{/css/header.css}">
-        <title>VagaHub</title>
-    </head>
-    <body>
-        <header id="header-fragment" th:fragment="header">
-            <a class="logo" th:href="@{/processos/listar}">
-                <h1>VagaHub</h1>
-            </a>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>VagaHub</title>
+</head>
+<body>
+<header id="header-fragment" th:fragment="header">
+    <a class="logo" th:href="@{/processos/listar}">
+        <h1>VagaHub</h1>
+    </a>
 
-            <a class="btn-nova-candidatura" th:href="@{/processos/criar}">
-                Nova Candidatura <i class="fa-solid fa-plus"></i>
-            </a>
+    <div class="header-actions">
+        <a class="btn-nova-candidatura"
+           th:if="${session.usuarioLogado != null}"
+           th:href="@{/processos/criar}">
+            Nova Candidatura <i class="fa-solid fa-plus"></i>
+        </a>
 
+        <div class="usuario-area" th:if="${session.usuarioLogado != null}">
+            <button class="usuario-dropdown" onclick="toggleMenu()" type="button">
+                <i class="fa-solid fa-user"></i>
+                <span th:text="${session.usuarioLogado.nomeUsuario}">Usuário</span>
+                <i class="fa-solid fa-caret-down"></i>
+            </button>
+            <div class="menu-dropdown" id="menuDropdown">
+                <a th:href="@{/perfil}">Perfil</a>
+                <a th:href="@{/logout}">Sair</a>
+            </div>
+        </div>
 
-        </header>
-    </body>
+        <a class="usuario-dropdown" th:if="${session.usuarioLogado == null}" th:href="@{/login}">
+            <i class="fa-solid fa-user"></i>
+            <span>Entrar</span>
+        </a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("menuDropdown");
+            if (menu) {
+                menu.classList.toggle("ativo");
+            }
+        }
+
+        document.addEventListener("click", function (e) {
+            const area = document.querySelector(".usuario-area");
+            if (area && !area.contains(e.target)) {
+                const menu = document.getElementById("menuDropdown");
+                if (menu) menu.classList.remove("ativo");
+            }
+        });
+    </script>
+</header>
+</body>
 </html>
