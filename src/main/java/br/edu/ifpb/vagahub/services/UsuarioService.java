@@ -37,4 +37,10 @@ public class UsuarioService {
         return new BCryptPasswordEncoder().matches(senhaDigitada, senhaCriptografada);
     }
 
+    // Novo método: Buscar por ID
+    public Usuario buscarPorId(Long idUsuario) {
+        return usuarioRepository.findById(idUsuario)
+                .orElse(null); // Retorna null se o usuário não for encontrado
+    }
+
 }
