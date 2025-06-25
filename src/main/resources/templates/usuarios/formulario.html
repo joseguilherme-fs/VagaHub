@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Usuário</title>
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/formulario-usuario.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+
+<main>
+  <form class="formulario" th:object="${usuario}" th:action="@{/usuarios}" method="post">
+    <h1>Cadastro de Usuário</h1>
+
+    <label class="label-input" for="nomeCompleto">Nome completo:</label>
+    <input id="nomeCompleto" type="text" th:field="*{nomeCompleto}" class="campo" required>
+    <span class="erro" th:if="${#fields.hasErrors('nomeCompleto')}" th:errors="*{nomeCompleto}"></span>
+
+    <label class="label-input" for="nomeUsuario">Nome de usuário:</label>
+    <input id="nomeUsuario" type="text" th:field="*{nomeUsuario}" class="campo" required>
+    <span class="erro" th:if="${#fields.hasErrors('nomeUsuario')}" th:errors="*{nomeUsuario}"></span>
+
+    <label class="label-input" for="senha">Senha:</label>
+    <input id="senha" type="password" th:field="*{senha}" class="campo" required>
+    <span class="erro" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></span>
+
+    <label class="label-input" for="email">Email:</label>
+    <input id="email" type="email" th:field="*{email}" class="campo" required>
+    <span class="erro" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+
+    <label class="label-input" for="telefone">Telefone:</label>
+    <input id="telefone" type="text" th:field="*{telefone}" class="campo">
+
+    <label class="label-input" for="linkedin">LinkedIn:</label>
+    <input id="linkedin" type="url" th:field="*{linkedin}" class="campo">
+    <span class="erro" th:if="${#fields.hasErrors('linkedin')}" th:errors="*{linkedin}"></span>
+
+    <label class="label-input" for="areaAtuacao">Área de atuação:</label>
+    <input id="areaAtuacao" type="text" th:field="*{areaAtuacao}" class="campo">
+    <span class="erro" th:if="${#fields.hasErrors('areaAtuacao')}" th:errors="*{areaAtuacao}"></span>
+
+    <button type="submit" class="botao proximo">Registrar</button>
+
+    <div th:if="${param.sucesso}">
+      <p class="sucesso">Usuário registrado com sucesso!</p>
+    </div>
+  </form>
+</main>
+</body>
+</html>
