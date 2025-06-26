@@ -43,4 +43,14 @@ public class UsuarioService {
                 .orElse(null); // Retorna null se o usuário não for encontrado
     }
 
+    public Usuario excluir(Long idUsuario) {
+        Optional<Usuario> u = usuarioRepository.findById(idUsuario);
+        if (u.isPresent()) {
+            Usuario usuario = u.get();
+            usuarioRepository.delete(usuario);
+            return usuario;
+        } else {
+            return null;
+        }
+    }
 }
