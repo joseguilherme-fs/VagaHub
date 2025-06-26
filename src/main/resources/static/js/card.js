@@ -109,3 +109,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// Aguarde o DOM carregar
+document.addEventListener("DOMContentLoaded", function () {
+    const mensagem = document.getElementById("mensagemSucesso");
+
+    // Verifica se a mensagem existe
+    if (mensagem) {
+        setTimeout(() => {
+            mensagem.style.transition = "opacity 0.5s ease";
+            mensagem.style.opacity = "0"; // Transição para desvanecer
+
+            // Remove completamente o elemento após a transição
+            setTimeout(() => mensagem.remove(), 500);
+        }, 3000); // A mensagem ficará visível por 3 segundos
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const mensagem = document.getElementById("mensagemSucesso");
+
+    if (mensagem) {
+        mensagem.style.opacity = "1";
+        mensagem.style.visibility = "visible"; // Mostra a mensagem imediatamente
+        setTimeout(() => {
+            mensagem.style.opacity = "0";
+            mensagem.style.visibility = "hidden"; // Oculta a mensagem após 3 segundos
+        }, 3000);
+    }
+});

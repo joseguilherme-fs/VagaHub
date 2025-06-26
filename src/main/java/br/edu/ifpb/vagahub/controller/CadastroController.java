@@ -32,5 +32,31 @@ public class CadastroController {
         usuarioService.salvar(usuario);
         return new ModelAndView("redirect:/login");
     }
+
+    // Método para exibir o formulário de edição
+    @GetMapping("/usuarios/{idUsuario}/editar")
+    public ModelAndView exibirFormularioEdicao(@PathVariable Long idUsuario) {
+        Usuario usuario = usuarioService.buscarPorId(idUsuario);
+        if (usuario == null) {
+            return new ModelAndView("redirect:/erro"); // Redireciona para uma página de erro, se necessário
+        }
+        ModelAndView mv = new ModelAndView("usuarios/formulario");
+        mv.addObject("usuario", usuario);
+        return mv;
+    }
+
+    // Método para salvar as alterações do usuário
+    @PostMapping("/usuarios/{idUsuario}/editar")
+    public ModelAndView editar(@PathVariable Long idUsuario, @Valid @ModelAttribute Usuario usuario, BindingResult result) {
+        if (result.hasErrors()) {
+            ModelAndView mv = new ModelAndView("usuarios/formulario");
+            mv.addObject("usuario", usuario);
+            return mv;
+        }
+        usuario.setIdUsuario(idUsuario); // Define o ID do usuário antes de salvar
+        usuarioService.salvar(usuario);
+        return new ModelAndView("redirect:/usuarios");
+    }
+
 }
 
