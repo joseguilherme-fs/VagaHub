@@ -66,64 +66,60 @@ public class ProcessoController {
 
         processoService.criar(processo, campoEmpresa, campoHabilidades);
 
-        return "redirect:/processos";
+        return "redirect:/processos/listar";
     }
 
-    /*@PostMapping("/atualizar/{id}")
-    public String atualizar(@PathVariable Long id, @RequestParam String status, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura, @RequestParam String atualizacao, Model model) {
+    @GetMapping("/editar/{id}")
+    public ModelAndView editar(@PathVariable Long id, ModelAndView mv) {
         Processo processo = processoService.findById(id);
         if (processo != null) {
-            if (atualizacao.equals("abrirCard")){
-                model.addAttribute("modoEdicao", true);
-                return "redirect:/processos/{id}";
-            } else if (atualizacao.equals("excluirProcesso")){
-                processoService.deleteById(id);
-                model.addAttribute("modoEdicao", false);
-                return "redirect:processos/listar";
-            }
-            else {
-                processo.setStatus(status);
-                processo.setDescricao(descricao);
-                processo.setTipoContratacao(tipoContratacao);
-                processo.setFormaCandidatura(formaCandidatura);
-            }
-            processoService.save(processo);
+            mv.addObject("processo", processo);
         } else {
-            return "redirect:processos";
+            mv.setViewName("redirect:formulario");
         }
-        return "redirect:processos/listar";
-    }*/
+        mv.setViewName("processos/card-edicao");
+        return mv;
+    }
+
     // Atualização do método "atualizar"
     @PostMapping("/atualizar/{id}")
     public String atualizar(
             @PathVariable Long id,
             @RequestParam String status,
+            @RequestParam String titulo,
             @RequestParam String descricao,
             @RequestParam String tipoContratacao,
             @RequestParam String formaCandidatura,
-            @RequestParam String atualizacao,
+            @RequestParam String modeloAtuacao,
+            @RequestParam String areaAtuacao,
             RedirectAttributes redirectAttributes) {
 
         Processo processo = processoService.findById(id);
         if (processo != null) {
-            if (atualizacao.equals("abrirCard")) {
-                return "redirect:/processos/" + id;
-            } else if (atualizacao.equals("excluirProcesso")) {
-                processoService.deleteById(id);
-                redirectAttributes.addFlashAttribute("mensagemSucesso", "Candidatura excluída com sucesso!");
-                return "redirect:/processos/listar";
-            } else {
-                processo.setStatus(status);
-                processo.setDescricao(descricao);
-                processo.setTipoContratacao(tipoContratacao);
-                processo.setFormaCandidatura(formaCandidatura);
-                processoService.save(processo);
+            processo.setStatus(status);
+            processo.setTitulo(titulo);
+            processo.setDescricao(descricao);
+            processo.setTipoContratacao(tipoContratacao);
+            processo.setFormaCandidatura(formaCandidatura);
+            processo.setModeloDeAtuacao(modeloAtuacao);
+            processo.setAreaAtuacao(areaAtuacao);
+            processoService.save(processo);
 
-                // Adicionando mensagem flash de sucesso
-                redirectAttributes.addFlashAttribute("mensagemSucesso", "Alterações salvas com sucesso!");
-            }
+            // Adicionando mensagem flash de sucesso
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Alterações salvas com sucesso!");
         } else {
             redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao atualizar o processo.");
+        }
+        return "redirect:/processos/listar";
+    }
+
+    @PostMapping("/excluir/{id}")
+    public String excluir(@PathVariable Long id, RedirectAttributes ra) {
+        Processo p = processoService.deleteById(id);
+        if (p != null) {
+            ra.addFlashAttribute("mensagemSucesso", "Processo excluído com sucesso!");
+        } else {
+            ra.addFlashAttribute("mensagemErro", "Erro ao excluir o processo.");
         }
         return "redirect:/processos/listar";
     }

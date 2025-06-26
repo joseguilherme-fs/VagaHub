@@ -16,7 +16,7 @@
         <div class="card-processo" th:each="processo : ${processos}">
             <div th:replace="fragments/card :: card(${processo})"></div>
         </div>
-        <!-- Adicione isso no início da página de listagem -->
+
         <div  id="mensagemSucesso" th:if="${mensagemSucesso}" class="alert alert-success" role="alert">
             <p th:text="${mensagemSucesso}"></p>
         </div>

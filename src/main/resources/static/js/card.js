@@ -1,8 +1,8 @@
 
 // Funções de controle de status (indicador de cor)
 function updateIndicatorColor() {
-    const select = document.getElementById('status-select');
-    const indicator = document.querySelector('.status-indicator');
+    let select = document.getElementById('status');
+    let indicator = document.querySelectorAll('#status-indicator');
 
     switch (select.value) {
         case 'Em Andamento':
@@ -17,39 +17,6 @@ function updateIndicatorColor() {
         default:
             indicator.style.backgroundColor = '#ccc'; // Cinza padrão
     }
-}
-
-// Funções de edição do processo
-function habilitarEdicao() {
-    document.querySelectorAll(".input-group input").forEach(input => {
-        input.style.display = "block";
-    });
-    document.querySelector(".input-group select").style.display = "block";
-    document.querySelectorAll(".input-group p").forEach(info => {
-        info.style.display = "none";
-    });
-    document.querySelector(".btn-edit").style.display = "none";
-    document.querySelector(".btn-delete").style.display = "none";
-    document.querySelector(".btn-save").style.display = "block";
-    document.querySelector(".btn-cancel-edit").style.display = "block";
-}
-
-function cancelarEdicao() {
-    document.querySelectorAll(".input-group input").forEach(input => {
-        input.style.display = "none";
-    });
-    document.querySelector(".input-group select").style.display = "none";
-    document.querySelectorAll(".input-group p").forEach(info => {
-        info.style.display = "block";
-    });
-    document.querySelector(".btn-edit").style.display = "block";
-    document.querySelector(".btn-delete").style.display = "block";
-    document.querySelector(".btn-save").style.display = "none";
-    document.querySelector(".btn-cancel-edit").style.display = "none";
-}
-
-function mostrarBotaoSalvarStatus(){
-    document.querySelector(".btn-update-status").style.display = "block";
 }
 
 // Funções de exclusão (modal e ação)
@@ -72,6 +39,10 @@ function excluirProcesso(id) {
 }
 
 // Inicialização quando o DOM estiver carregado
+// window.onload = () => {
+//     updateIndicatorColor();
+// }
+
 document.addEventListener('DOMContentLoaded', () => {
     // Configuração do indicador de status
     const select = document.getElementById('status-select');
@@ -81,11 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Configuração dos modais de exclusão (unificando os modais)
-    const deleteButtons = document.querySelectorAll('.delete, .btn-delete');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const modalId = this.classList.contains('delete') ? 'deleteModal' : 'confirmModal';
-            document.getElementById(modalId).style.display = 'flex';
+    const deleteButton = document.getElementById('botao-modal');
+    deleteButton.addEventListener('click', function() {
+            document.getElementById("confirmModal").style.display = 'flex';
         });
     });
 
@@ -107,8 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modal.style.display = 'none';
             }
         });
-    });
-});
+    })
 
 // Aguarde o DOM carregar
 document.addEventListener("DOMContentLoaded", function () {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProcessoService {
@@ -34,8 +35,13 @@ public class ProcessoService {
         return processo;
     }
 
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public Processo deleteById(Long id) {
+        Optional<Processo> p = repository.findById(id);
+        if (p.isPresent()) {
+            repository.deleteById(p.get().getId());
+            return p.get();
+        }
+        return null;
     }
 
     public Processo findById(Long id) {

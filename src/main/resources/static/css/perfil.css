@@ -47,7 +47,7 @@
     border-radius: 5px;
 }
 
-#btn-editar, #btn-salvar {
+.botao {
     font-weight: 600;
     padding: 7px 18px;
     margin: 10px 0;
@@ -56,4 +56,15 @@
     border: 1px solid #ffffff;
     border-radius: 25px;
     font-size: 11pt;
+    cursor: pointer;
+}
+
+.botao:hover {
+    background-color: #14245c;
+}
+
+#botoes-perfil {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }
