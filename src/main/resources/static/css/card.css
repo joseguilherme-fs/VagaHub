@@ -195,8 +195,20 @@
     background-color: #9999F0;
 }
 
+.modal-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+}
+
 .save {
     background-color: #a1fa89;
+}
+
+.save:hover {
+    background-color: #55aa3b;
+    color: white;
 }
 
 .delete {
@@ -204,12 +216,28 @@
     margin-top: 10px;
 }
 
+.delete:hover {
+    background-color: #b53838;
+    color:  white;
+}
+
 .edit {
     background-color: #BBBBF3;
 }
 
+.edit:hover {
+    background-color: #7070bc;
+    color:  white;
+}
+
 .cancel-edit {
     background-color: #BBBBF3;
+    margin-top: 10px;
+}
+
+.cancel-edit:hover {
+    background-color: #7070bc;
+    color:  white;
     margin-top: 10px;
 }
 
