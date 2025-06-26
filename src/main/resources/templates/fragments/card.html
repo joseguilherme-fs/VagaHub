@@ -12,9 +12,11 @@
 <div th:insert="fragments/header :: header"></div>
 
 <div id="edicao-card">
-    <div th:fragment="card(processo)" class="card">
+    <!-- FORMA CORRETA: Formulário envolvendo todo o card -->
+    <form th:fragment="card(processo)" class="card" th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">
+
         <div class="dropdown">
-            <input th:if="${!modoEdicao}" class="inputs-exibicao" id="status" name="status" th:value="${processo.status}"/>
+            <input th:if="${!modoEdicao}" class="inputs-exibicao" id="status" name="status" th:value="${processo.status}" readonly/>
             <div th:if="${modoEdicao}" class="select-container">
                 <span class="status-indicator"></span>
                 <select class="styled-select" id="status-select" name="status" th:value="${processo.status}">
@@ -30,146 +32,111 @@
 
         <div class="input-group">
             <label>Descrição do processo:</label>
-            <input th:if="${modoEdicao}" name="descricao" th:value="${processo.descricao}" type="text">
-            <input th:if="${!modoEdicao}" class="inputs-exibicao" name="descricao" th:value="${processo.descricao}" readonly/>
+            <!-- Campo de Edição -->
+            <input th:if="${modoEdicao}"
+                   class="campo-edicao"
+                   name="descricao"
+                   th:value="${processo.descricao}"
+                   type="text">
+            <!-- Campo de Visualização -->
+            <input th:if="${!modoEdicao}"
+                   class="inputs-exibicao campo-visualizacao"
+                   name="descricao"
+                   th:value="${processo.descricao}"
+                   readonly/>
         </div>
 
         <div class="input-group">
             <label>Modelo de contratação:</label>
-            <select th:if="${modoEdicao}" class="styled-select" name="tipoContratacao" th:value="${processo.tipoContratacao}">
+            <!-- Select de Edição -->
+            <select th:if="${modoEdicao}"
+                    class="styled-select campo-edicao"
+                    name="tipoContratacao"
+                    th:value="${processo.tipoContratacao}">
                 <option value="CLT">CLT</option>
                 <option value="PJ">PJ</option>
                 <option value="Estagiário">Estagiário</option>
                 <option value="Estatutário">Estatutário</option>
             </select>
-            <input th:if="${!modoEdicao}" class="inputs-exibicao" name="tipoContratacao" th:value="${processo.tipoContratacao}" readonly/>
+            <!-- Input de Visualização -->
+            <input th:if="${!modoEdicao}"
+                   class="inputs-exibicao campo-visualizacao"
+                   name="tipoContratacao"
+                   th:value="${processo.tipoContratacao}"
+                   readonly/>
         </div>
 
         <div class="input-group">
             <label>Forma de candidatura:</label>
-            <select th:if="${modoEdicao}" class="styled-select"  name="formaCandidatura" th:value="${processo.formaCandidatura}">
+            <!-- Select de Edição -->
+            <select th:if="${modoEdicao}"
+                    class="styled-select campo-edicao"
+                    name="formaCandidatura"
+                    th:value="${processo.formaCandidatura}">
                 <option value="Concurso">Concurso</option>
                 <option value="Email">Email</option>
                 <option value="Portal de Vagas">Portal de Vagas</option>
             </select>
-            <input th:if="${!modoEdicao}" name="formaCandidatura" class="inputs-exibicao" th:value="${processo.formaCandidatura}" readonly/>
+            <!-- Input de Visualização -->
+            <input th:if="${!modoEdicao}"
+                   name="formaCandidatura"
+                   class="inputs-exibicao campo-visualizacao"
+                   th:value="${processo.formaCandidatura}"
+                   readonly/>
         </div>
-
 
         <!-- Botões de ação -->
         <div class="buttons">
-
-            <button th:if="${!modoEdicao}"  type="submit" name="atualizacao" value="abrirCard" class="btn-edit">
+            <!-- Modo Visualização -->
+            <button th:if="${!modoEdicao}"
+                    type="submit"
+                    name="atualizacao"
+                    value="abrirCard"
+                    class="btn-edit modo-visualizacao">
                 <i class="fas fa-edit"></i> Editar
             </button>
 
-            <button th:if="${modoEdicao}" type="submit" name="atualizacao" value="fecharCard" class="btn-cancel-edit">
-                <i class="fas fa-cancel"></i> Cancelar
-            </button>
-
-            <button type="button" th:if="${!modoEdicao}" class="btn-delete">
+            <button th:if="${!modoEdicao}"
+                    type="button"
+                    class="btn-delete modo-visualizacao"
+                    th:onclick="'confirmarExclusao(' + ${processo.id} + ')'">
                 <i class="fas fa-trash"></i> Excluir
             </button>
 
-            <button type="submit" th:if="${modoEdicao}" name="atualizacao" value="atualizacaoInfos" class="btn-save">
-                <i class="fas fa-check"></i> Salvar alterações
+            <!-- Modo Edição -->
+            <button th:if="${modoEdicao}"
+                    type="submit"
+                    name="atualizacao"
+                    value="fecharCard"
+                    class="btn-cancel-edit modo-edicao">
+                <i class="fas fa-times"></i> Cancelar
             </button>
 
+            <button th:if="${modoEdicao}"
+                    type="submit"
+                    name="atualizacao"
+                    value="atualizacaoInfos"
+                    class="btn-save modo-edicao">
+                <i class="fas fa-check"></i> Salvar alterações
+            </button>
         </div>
 
+        <!-- Modal de Confirmação -->
         <div id="confirmModal" class="modal" style="display:none">
             <div class="modal-content">
                 <h2>Confirmar Exclusão</h2>
                 <p>Tem certeza que deseja excluir esta candidatura?</p>
                 <div class="modal-actions">
                     <button type="button" onclick="fecharModal()">Cancelar</button>
-                    <button type="submit" name="atualizacao" value="excluirProcesso" id="btnConfirmarExclusao" class="danger">Excluir</button>
+                    <button type="submit"
+                            name="atualizacao"
+                            value="excluirProcesso"
+                            class="danger">Excluir</button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
-
-<!--//////////////////////////////////////////////////////////////////////////////////////-->
-
-<!--<div id="edicao-card">-->
-<!--    <form th:fragment="card(processo)" class="card" th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">-->
-<!--        <div class="dropdown">-->
-<!--            <input th:if="${!modoEdicao}" class="inputs-exibicao" id="status" name="status" th:value="${processo.status}"/>-->
-<!--            <div th:if="${modoEdicao}" class="select-container">-->
-<!--                <span class="status-indicator"></span>-->
-<!--                <select class="styled-select" id="status-select" name="status" th:value="${processo.status}">-->
-<!--                    <option value="Em Andamento">Em Andamento</option>-->
-<!--                    <option value="Banco de Talentos">Banco de Talentos</option>-->
-<!--                    <option value="Finalizado">Finalizado</option>-->
-<!--                </select>-->
-<!--                <i class="fas fa-chevron-down"></i>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <h1 th:text="${processo.titulo}"></h1>-->
-
-<!--        <div class="input-group">-->
-<!--            <label>Descrição do processo:</label>-->
-<!--            <input th:if="${modoEdicao}" name="descricao" th:value="${processo.descricao}" type="text">-->
-<!--            <input th:if="${!modoEdicao}" class="inputs-exibicao" name="descricao" th:value="${processo.descricao}" readonly/>-->
-<!--        </div>-->
-
-<!--        <div class="input-group">-->
-<!--            <label>Modelo de contratação:</label>-->
-<!--            <select th:if="${modoEdicao}" class="styled-select" name="tipoContratacao" th:value="${processo.tipoContratacao}">-->
-<!--                <option value="CLT">CLT</option>-->
-<!--                <option value="PJ">PJ</option>-->
-<!--                <option value="Estagiário">Estagiário</option>-->
-<!--                <option value="Estatutário">Estatutário</option>-->
-<!--            </select>-->
-<!--            <input th:if="${!modoEdicao}" class="inputs-exibicao" name="tipoContratacao" th:value="${processo.tipoContratacao}" readonly/>-->
-<!--        </div>-->
-
-<!--        <div class="input-group">-->
-<!--            <label>Forma de candidatura:</label>-->
-<!--            <select th:if="${modoEdicao}" class="styled-select"  name="formaCandidatura" th:value="${processo.formaCandidatura}">-->
-<!--                <option value="Concurso">Concurso</option>-->
-<!--                <option value="Email">Email</option>-->
-<!--                <option value="Portal de Vagas">Portal de Vagas</option>-->
-<!--            </select>-->
-<!--            <input th:if="${!modoEdicao}" name="formaCandidatura" class="inputs-exibicao" th:value="${processo.formaCandidatura}" readonly/>-->
-<!--        </div>-->
-
-
-<!--        &lt;!&ndash; Botões de ação &ndash;&gt;-->
-<!--        <div class="buttons">-->
-
-<!--            <button th:if="${!modoEdicao}"  type="submit" name="atualizacao" value="abrirCard" class="btn-edit">-->
-<!--                <i class="fas fa-edit"></i> Editar-->
-<!--            </button>-->
-
-<!--            <button th:if="${modoEdicao}" type="submit" name="atualizacao" value="fecharCard" class="btn-cancel-edit">-->
-<!--                <i class="fas fa-cancel"></i> Cancelar-->
-<!--            </button>-->
-
-<!--            <button type="button" th:if="${!modoEdicao}" class="btn-delete">-->
-<!--                <i class="fas fa-trash"></i> Excluir-->
-<!--            </button>-->
-
-<!--            <button type="submit" th:if="${modoEdicao}" name="atualizacao" value="atualizacaoInfos" class="btn-save">-->
-<!--                <i class="fas fa-check"></i> Salvar alterações-->
-<!--            </button>-->
-
-<!--        </div>-->
-
-<!--        <div id="confirmModal" class="modal" style="display:none">-->
-<!--            <div class="modal-content">-->
-<!--                <h2>Confirmar Exclusão</h2>-->
-<!--                <p>Tem certeza que deseja excluir esta candidatura?</p>-->
-<!--                <div class="modal-actions">-->
-<!--                    <button type="button" onclick="fecharModal()">Cancelar</button>-->
-<!--                    <button type="submit" name="atualizacao" value="excluirProcesso" id="btnConfirmarExclusao" class="danger">Excluir</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--</div>-->
 
 <script th:src="@{/js/card.js}"></script>
 </body>
