@@ -10,6 +10,6 @@ public class UsuarioController {
 
     @GetMapping("/perfil")
     public ModelAndView exibirPerfil() {
-        return new ModelAndView("/usuarios/perfil");
+        return new ModelAndView("usuarios/perfil");
     }
 }
