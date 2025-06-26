@@ -127,4 +127,15 @@ public class ProcessoController {
         }
         return "redirect:/processos/listar";
     }
+
+    @PostMapping("/excluir/{id}")
+    public String excluir(@PathVariable Long id, RedirectAttributes ra) {
+        Processo p = processoService.deleteById(id);
+        if (p != null) {
+            ra.addFlashAttribute("mensagemSucesso", "Processo excluído com sucesso!");
+        } else {
+            ra.addFlashAttribute("mensagemErro", "Erro ao excluir o processo.");
+        }
+        return "redirect:/processos/listar";
+    }
 }
