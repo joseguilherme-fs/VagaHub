@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/perfil.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <title>Perfil</title>
+</head>
+<body>
+    <div th:insert="fragments/header :: header"></div>
+    <main id="perfil">
+        <i id="icone-usuario" class="fa-solid fa-circle-user"></i>
+
+        <div class="dados-usuario">
+            <label for="nomeusuario" class="label-dado">Nome de usuário:</label>
+            <input readonly id="nomeusuario" class="dado-usuario" th:value="${session.usuarioLogado.nomeUsuario}">
+        </div>
+
+        <div class="dados-usuario">
+            <label for="nomecompleto" class="label-dado">Nome Completo:</label>
+            <input readonly id="nomecompleto" class="dado-usuario" th:value="${session.usuarioLogado.nomeCompleto}">
+        </div>
+
+        <div class="dados-usuario">
+            <label for="email" class="label-dado">E-mail:</label>
+            <input readonly id="email" class="dado-usuario" th:value="${session.usuarioLogado.email}">
+        </div>
+
+        <button id="btn-editar">Editar informações <i class="fa-solid fa-user-pen"></i></button>
+<!--        <button id="btn-salvar">Salvar informações <i class="fa-solid fa-floppy-disk"></i></button>-->
+    </main>
+</body>
+</html>
