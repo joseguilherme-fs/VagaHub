@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processo Seletivo</title>
+    <link rel="stylesheet" th:href="@{/css/card.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!--    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>-->
+</head>
+    <body>
+        <div th:insert="fragments/header :: header"></div>
+        <div id="container-card">
+            <div class="card">
+                <form th:action="@{/processos/atualizar/{id}(id=${processo.id})}" method="POST">
+                    <div class="dropdown">
+                        <label>Status do processo:</label>
+                        <div class="select-container">
+                            <!--                        <span id="status-indicator"></span>-->
+                            <select name="status" class="inputs-edicao" id="status">
+                                <option value="Em Andamento" th:selected="${processo.status == 'Em Andamento'}">Em Andamento</option>
+                                <option value="Banco de Talentos" th:selected="${processo.status == 'Banco de Talentos'}">Banco de Talentos</option>
+                                <option value="Finalizado" th:selected="${processo.status == 'Finalizado'}">Finalizado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Título do processo:</label>
+                        <input name="titulo" class="inputs-edicao" th:value="${processo.titulo}"/>
+                    </div>
+
+                    <div>
+                        <label>Descrição do processo:</label>
+                        <input class="inputs-edicao" name="descricao" th:value="${processo.descricao}"/>
+                    </div>
+
+                    <div id="container-tipoContratacao-formaCandidatura">
+                        <div>
+                            <label>Tipo de contratação:</label>
+                            <select class="inputs-edicao" name="tipoContratacao">
+                                <option value="CLT" th:selected="${processo.tipoContratacao == 'CLT'}">CLT</option>
+                                <option value="PJ" th:selected="${processo.tipoContratacao == 'PJ'}">PJ</option>
+                                <option value="Estágio" th:selected="${processo.tipoContratacao == 'Estágio'}">Estágio</option>
+                                <option value="Estatutário" th:selected="${processo.tipoContratacao == 'Estatutário'}">Estatutário</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Forma de candidatura:</label>
+                            <select name="formaCandidatura" class="inputs-edicao" th:value="${processo.formaCandidatura}">
+                                <option value="Portal de Vagas" th:selected="${processo.formaCandidatura == 'Portal de Vagas'}">Portal de Vagas</option>
+                                <option value="E-mail" th:selected="${processo.formaCandidatura == 'E-mail'}">E-mail</option>
+                                <option value="Edital" th:selected="${processo.formaCandidatura == 'Edital'}">Edital</option>
+                                <option value="Concurso" th:selected="${processo.formaCandidatura == 'Concurso'}">Concurso</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="container-modeloAtuacao-areaAtuacao">
+                        <div>
+                            <label>Modelo de atuação:</label>
+                            <select name="modeloAtuacao" class="inputs-edicao" th:value="${processo.modeloDeAtuacao}">
+                                <option value="Presencial" th:selected="${processo.modeloDeAtuacao == 'Presencial'}">Presencial</option>
+                                <option value="Híbrido" th:selected="${processo.modeloDeAtuacao == 'Híbrido'}">Híbrido</option>
+                                <option value="Home Office" th:selected="${processo.modeloDeAtuacao == 'Home Office'}">Home Office</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Área de atuação:</label>
+                            <input name="areaAtuacao" class="inputs-edicao" th:value="${processo.areaAtuacao}"/>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn save">
+                        <i class="fas fa-check"></i> Salvar alterações
+                    </button>
+                </form>
+
+                <div>
+                    <form th:action="@{/processos/listar}" method="GET">
+                        <button type="submit" class="btn cancel-edit">
+                            <i class="fas fa-cancel"></i> Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script th:src="@{/js/card.js}"></script>
+    </body>
+</html>
