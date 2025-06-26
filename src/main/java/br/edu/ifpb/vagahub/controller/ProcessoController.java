@@ -66,11 +66,11 @@ public class ProcessoController {
 
         processoService.criar(processo, campoEmpresa, campoHabilidades);
 
-        return "redirect:/processos";
+        return "redirect:/processos/listar";
     }
 
-    /*@PostMapping("/atualizar/{id}")
-    public String atualizar(@PathVariable Long id, @RequestParam String status, @RequestParam String descricao, @RequestParam String tipoContratacao, @RequestParam String formaCandidatura, @RequestParam String atualizacao, Model model) {
+    @GetMapping("/editar/{id}")
+    public ModelAndView editar(@PathVariable Long id, ModelAndView mv) {
         Processo processo = processoService.findById(id);
         if (processo != null) {
             if (atualizacao.equals("abrirCard")){
@@ -89,10 +89,12 @@ public class ProcessoController {
             }
             processoService.save(processo);
         } else {
-            return "redirect:processos";
+            mv.setViewName("redirect:formulario");
         }
-        return "redirect:processos/listar";
-    }*/
+        mv.setViewName("processos/card-edicao");
+        return mv;
+    }
+
     // Atualização do método "atualizar"
     @PostMapping("/atualizar/{id}")
     public String atualizar(
