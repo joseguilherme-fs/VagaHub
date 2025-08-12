@@ -31,9 +31,11 @@
         </div>
 
         <div id="botoes-perfil">
-            <button class="botao editar">Editar informações <i class="fa-solid fa-user-pen"></i></button>
-            <button id="botao-modal" class="botao delete">Excluir conta <i class="fa-solid fa-trash"></i></button>
-            <!--        <button id="btn-salvar">Salvar informações <i class="fa-solid fa-floppy-disk"></i></button>-->
+            <a th:href="@{/editar-perfil}">
+                <button class="botao editar">Editar informações <i class="fa-solid fa-user-pen"></i></button>
+            </a>
+
+            <button id="botao-modal" class="botao excluir">Excluir conta <i class="fa-solid fa-trash"></i></button>
         </div>
 
         <div id="confirmModal" class="modal" style="display:none">
