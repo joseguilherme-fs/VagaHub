@@ -53,4 +53,19 @@ public class UsuarioService {
             return null;
         }
     }
+
+    public Usuario atualizarNomeEmail(Long idUsuario, String nomeCompleto, String email) {
+        Optional<Usuario> u = usuarioRepository.findById(idUsuario);
+
+        if (u.isPresent()) {
+            Usuario usuario = u.get();
+            usuario.setNomeCompleto(nomeCompleto);
+            usuario.setEmail(email);
+            usuarioRepository.save(usuario);
+            return usuario;
+        } else {
+            return null;
+        }
+    }
+
 }
