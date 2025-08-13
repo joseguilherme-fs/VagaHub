@@ -81,12 +81,6 @@ main h1 {
     background-color: #4565cd;
 }
 
-.step h2 {
-    color: #4caf50;
-    text-align: center;
-    font-size: 1rem;
-}
-
 @keyframes fadeIn {
     from {
         opacity: 0;

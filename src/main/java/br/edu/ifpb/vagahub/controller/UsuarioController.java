@@ -55,9 +55,22 @@ public class UsuarioController {
         return "redirect:/perfil";
     }
 
+    @GetMapping("/alterar-senha")
+    public ModelAndView alterarSenha() {
+        return new ModelAndView("/usuarios/alterar-senha");
+    }
 
+    @PostMapping("/recuperar/alterar-senha")
+    public String alterarSenha(@RequestParam String email, @RequestParam String novaSenha, RedirectAttributes ra) {
+        Usuario atualizado = usuarioService.atualizarSenhaPorEmail(email, novaSenha);
 
-
-
+        if (atualizado != null) {
+            ra.addFlashAttribute("mensagemSucesso", "Senha alterada com sucesso!");
+            return "redirect:/login";
+        } else {
+            ra.addFlashAttribute("mensagemErro", "Não foi possível alterar a senha. Verifique o email.");
+            return "redirect:/recuperar/alterar-senha";
+        }
+    }
 
 }
