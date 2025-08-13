@@ -68,4 +68,16 @@ public class UsuarioService {
         }
     }
 
+    public Usuario atualizarSenhaPorEmail(String email, String novaSenha) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            String senhaCriptografada = encoder.encode(novaSenha);
+            usuario.setSenha(senhaCriptografada);
+            return usuarioRepository.save(usuario);
+        }
+        return null;
+    }
+
+
 }
