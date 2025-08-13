@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" th:href="@{/css/header.css}">
+  <link rel="stylesheet" th:href="@{/css/alterar-senha.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <title>Esqueceu a senha?</title>
+</head>
+<body>
+    <div th:insert="fragments/header :: header"></div>
+    <main>
+        <h1>Recuperação de senha</h1>
+
+        <ul id="stepper">
+            <li class="step active">
+                <label for="emailRecuperacao">E-mail cadastrado:</label>
+                <input id="emailRecuperacao" type="text" required>
+                <button class="next">Enviar código</button>
+            </li>
+
+            <li class="step">
+                <label for="codigoRecuperacao">Insira o código recebido:</label>
+                <input id="codigoRecuperacao" type="text" required>
+                <button class="next">Confirmar</button>
+            </li>
+
+            <li class="step">
+                <label for="novaSenha">Insira a nova senha:</label>
+                <input id="novaSenha" type="password" required>
+                <button class="next">Confirmar</button>
+            </li>
+
+            <li class="step">
+                <h2>Recuperação realizada com sucesso!</h2>
+                <button onclick="window.location.href='/login'">Voltar para o Login</button>
+            </li>
+        </ul>
+    </main>
+</body>
+<script>
+    const steps = document.querySelectorAll(".step");
+    let currentStep = 0;
+
+    document.querySelectorAll(".next").forEach(button => {
+        button.addEventListener("click", () => {
+            if (currentStep < steps.length - 1) {
+                steps[currentStep].classList.remove("active");
+                currentStep++;
+                steps[currentStep].classList.add("active");
+            }
+        });
+    });
+</script>
+</html>
