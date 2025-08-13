@@ -1,0 +1,106 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333333;
+}
+
+main {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    max-width: 450px;
+    margin: 50px auto;
+    padding: 30px 25px;
+}
+
+main h1 {
+    text-align: center;
+    color: #3c57b0;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+}
+
+#stepper {
+    width: 90%;
+    list-style: none;
+}
+
+.step {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+.step.active {
+    display: flex;
+}
+
+.step label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+}
+
+.step input {
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step input:focus {
+    outline: none;
+    border-color: #3c57b0;
+    box-shadow: 0 0 6px rgba(90, 107, 248, 0.4);
+    background-color: #fff;
+}
+
+.step button {
+    padding: 12px 15px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    background-color: #3c57b0;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.step button:hover {
+    background-color: #4565cd;
+}
+
+.step h2 {
+    color: #4caf50;
+    text-align: center;
+    font-size: 1rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 500px) {
+    main {
+        margin: 30px 15px;
+        padding: 25px 20px;
+    }
+}
