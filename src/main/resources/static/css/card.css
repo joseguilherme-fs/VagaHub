@@ -50,6 +50,15 @@
     background-color: red;
 }
 
+h1#titulo-processos-finalizados {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20pt; /* ou o tamanho que preferir */
+    color: #333;     /* mesma cor dos títulos dos cards */
+    text-align: center;
+    margin: 20px 0;
+}
+
+
 /*.dropdown select {*/
 /*    background-color: #efefef;*/
 /*    font-size: 10pt;*/
