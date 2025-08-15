@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processos Finalizados</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<main style="text-align: center; padding: 20px;">
+    <h1 id="titulo-processos-finalizados">Processos Finalizados</h1>
+
+    <div class="cards-container" style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+        <div th:each="processo : ${processos}" class="card">
+            <h2 th:text="${processo.titulo}">Título do Processo</h2>
+            <p th:text="'Código: ' + ${processo.id}">Código</p>
+            <p th:text="'Data de Finalização: ' + ${processo.dataFinalizacao}">Data</p>
+            <p th:text="'Descrição: ' + ${processo.descricao}">Descrição</p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,7 +1,9 @@
 package br.edu.ifpb.vagahub.controller;
 
+import br.edu.ifpb.vagahub.model.Processo;
 import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.services.UsuarioService;
+import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class UsuarioController {
@@ -27,6 +31,12 @@ public class UsuarioController {
     public ModelAndView exibirEditarPerfil() {
         return new ModelAndView("/usuarios/editar-perfil");
     }
+
+    @GetMapping("/processos-finalizados")
+    public ModelAndView exibirProcessosFinalizados() {
+        return new ModelAndView("/usuarios/processos-finalizados");
+    }
+
 
     @PostMapping("/usuario/excluir/{id}")
     public String excluirConta(@PathVariable Long id, RedirectAttributes ra, HttpSession session) {

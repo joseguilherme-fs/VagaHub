@@ -73,7 +73,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
     transition: background-color 0.3s ease;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
@@ -93,6 +92,19 @@ body {
 .excluir:hover {
     background-color: #f14646;
 }
+.botao.finalizados {
+    background-color: #28a745; /* Verde */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.botao.finalizados:hover {
+    background-color: #218838;
+}
+
 
 .modal {
     position: fixed;
