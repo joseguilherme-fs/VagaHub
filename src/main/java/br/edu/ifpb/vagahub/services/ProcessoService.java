@@ -52,5 +52,26 @@ public class ProcessoService {
     public List<Processo> findAll() {
         return repository.findAll();
     }
+
+    // Novo método para buscar processos por status
+    public List<Processo> findByStatus(String status) {
+        return repository.findByStatus(status);
+    }
+
+    // Novo método para buscar processos finalizados ordenados
+    public List<Processo> findProcessosFinalizados() {
+        return repository.findByStatusOrderByIdDesc("Finalizado");
+    }
+
+    // Novo método para atualizar apenas o status do processo
+    public Processo atualizarStatus(Long id, String novoStatus) {
+        Optional<Processo> processoOpt = repository.findById(id);
+        if (processoOpt.isPresent()) {
+            Processo processo = processoOpt.get();
+            processo.setStatus(novoStatus);
+            return repository.save(processo);
+        }
+        return null;
+    }
 }
 

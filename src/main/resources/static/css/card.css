@@ -28,6 +28,9 @@
     text-align: center;
 }
 
+
+
+
 .card-processo{
     margin: 10px 0;
     width: 80%;
@@ -52,8 +55,8 @@
 
 h1#titulo-processos-finalizados {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 20pt; /* ou o tamanho que preferir */
-    color: #333;     /* mesma cor dos títulos dos cards */
+    font-size: 20pt;
+    color: #333;
     text-align: center;
     margin: 20px 0;
 }
@@ -298,3 +301,5 @@ h1#titulo-processos-finalizados {
         visibility: hidden;
     }
 }
+
+
