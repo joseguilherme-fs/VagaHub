@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -81,7 +82,7 @@ public class ProcessoController {
         return mv;
     }
 
-    // Atualização do método "atualizar"
+    // Método atualizado para incluir data de finalização
     @PostMapping("/atualizar/{id}")
     public String atualizar(
             @PathVariable Long id,
@@ -96,6 +97,11 @@ public class ProcessoController {
 
         Processo processo = processoService.findById(id);
         if (processo != null) {
+            // Verifica se o status mudou para "Finalizado"
+            if ("Finalizado".equals(status) && !"Finalizado".equals(processo.getStatus())) {
+                processo.setDataFinalizacao(LocalDateTime.now());
+            }
+
             processo.setStatus(status);
             processo.setTitulo(titulo);
             processo.setDescricao(descricao);
@@ -105,12 +111,32 @@ public class ProcessoController {
             processo.setAreaAtuacao(areaAtuacao);
             processoService.save(processo);
 
-            // Adicionando mensagem flash de sucesso
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Alterações salvas com sucesso!");
         } else {
             redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao atualizar o processo.");
         }
         return "redirect:/processos/listar";
+    }
+
+    // Novo método para atualizar apenas o status via AJAX
+    @PostMapping("/atualizar-status/{id}")
+    @ResponseBody
+    public String atualizarStatus(@PathVariable Long id, @RequestParam String status) {
+        try {
+            Processo processo = processoService.findById(id);
+            if (processo != null) {
+                // Se está mudando para "Finalizado", define a data
+                if ("Finalizado".equals(status) && !"Finalizado".equals(processo.getStatus())) {
+                    processo.setDataFinalizacao(LocalDateTime.now());
+                }
+                processo.setStatus(status);
+                processoService.save(processo);
+                return "success";
+            }
+            return "error";
+        } catch (Exception e) {
+            return "error";
+        }
     }
 
     @PostMapping("/excluir/{id}")
