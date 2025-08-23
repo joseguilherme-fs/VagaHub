@@ -35,6 +35,7 @@
             </form>
         </li>
     </ul>
+    <div id="mensagemRecuperacao" class="mensagem"></div>
 </main>
 </body>
 <script>
@@ -46,22 +47,35 @@
         return regex.test(email);
     }
 
+    function mostrarMensagem(texto, tipo) {
+        const div = document.getElementById("mensagemRecuperacao");
+        div.textContent = texto;
+        div.className = `mensagem ${tipo}`;
+        div.style.display = "block";
+
+        setTimeout(() => { div.style.display = "none"; }, 5000);
+    }
+
     document.getElementById("btnEnviarCodigo").addEventListener("click", async (e) => {
         e.preventDefault();
         const emailInput = document.getElementById("emailRecuperacao").value.trim();
-        if (!validarEmail(emailInput)) { alert("Insira um email válido."); return; }
+        if (!validarEmail(emailInput)) {
+            mostrarMensagem("Por favor, insira um email válido.", "erro");
+            return;
+        }
 
         try {
             const response = await fetch(`/recuperar/enviar-codigo?email=${encodeURIComponent(emailInput)}`);
             const text = await response.text();
-            alert(text);
+            mostrarMensagem(text, "sucesso");
 
             steps[currentStep].classList.remove("active");
             currentStep++;
             steps[currentStep].classList.add("active");
-
             document.getElementById("emailHidden").value = emailInput;
-        } catch (error) { alert("Erro ao enviar o código."); }
+        } catch (error) {
+            mostrarMensagem("Erro ao enviar o código.", "erro");
+        }
     });
 
     document.getElementById("btnConfirmarCodigo").addEventListener("click", async (e) => {
@@ -74,15 +88,16 @@
             const text = await response.text();
 
             if (text === "Código válido") {
-                alert("Código correto! ✅");
-
+                mostrarMensagem("Código correto! ✅", "sucesso");
                 steps[currentStep].classList.remove("active");
                 currentStep++;
                 steps[currentStep].classList.add("active");
             } else {
-                alert("Código inválido ❌");
+                mostrarMensagem("Código inválido ❌", "erro");
             }
-        } catch (error) { alert("Erro ao verificar o código."); }
+        } catch (error) {
+            mostrarMensagem("Erro ao verificar o código.", "erro");
+        }
     });
 </script>
 </html>
