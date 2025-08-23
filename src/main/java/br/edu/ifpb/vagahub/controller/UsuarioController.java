@@ -3,6 +3,7 @@ package br.edu.ifpb.vagahub.controller;
 import br.edu.ifpb.vagahub.model.Processo;
 import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.services.EmailService;
+import br.edu.ifpb.vagahub.services.ProcessoService;
 import br.edu.ifpb.vagahub.services.UsuarioService;
 import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +29,10 @@ public class UsuarioController {
 
     private Map<String, String> codigosRecuperacao = new ConcurrentHashMap<>();
 
+    @Autowired
+    private ProcessoService processoService;
+
+
     @GetMapping("/perfil")
     public ModelAndView exibirPerfil() {
         return new ModelAndView("/usuarios/perfil");
@@ -40,7 +45,11 @@ public class UsuarioController {
 
     @GetMapping("/processos-finalizados")
     public ModelAndView exibirProcessosFinalizados() {
-        return new ModelAndView("/usuarios/processos-finalizados");
+        ModelAndView mv = new ModelAndView("/usuarios/processos-finalizados");
+        // Busca todos os processos com status "Finalizado"
+        List<Processo> processosFinalizados = processoService.findProcessosFinalizados();
+        mv.addObject("processos", processosFinalizados);
+        return mv;
     }
 
     @GetMapping("/recuperar-senha")
