@@ -1,94 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" th:href="@{/css/header.css}">
-  <link rel="stylesheet" th:href="@{/css/alterar-senha.css}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <title>Esqueceu a senha?</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação de Senha</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/alterar-senha.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 </head>
 <body>
-    <div th:insert="fragments/header :: header"></div>
-    <main>
-        <h1>Recuperação de senha</h1>
+<div th:insert="fragments/header :: header"></div>
+<main>
+    <h1>Recuperação de senha</h1>
 
-        <ul id="stepper">
-            <li class="step active">
-                <label for="emailRecuperacao">E-mail cadastrado:</label>
-                <input id="emailRecuperacao" type="text" required>
-                <button class="next">Enviar código</button>
-            </li>
+    <ul id="stepper">
+        <li class="step active">
+            <label for="emailRecuperacao">E-mail cadastrado:</label>
+            <input id="emailRecuperacao" type="text" required>
+            <button class="next" id="btnEnviarCodigo">Enviar código</button>
+        </li>
 
-            <li class="step">
-                <label for="codigoRecuperacao">Insira o código recebido:</label>
-                <input id="codigoRecuperacao" type="text" required>
-                <button class="next">Confirmar</button>
-            </li>
+        <li class="step">
+            <label for="codigoRecuperacao">Insira o código recebido:</label>
+            <input id="codigoRecuperacao" type="text" required>
+            <button class="next" id="btnConfirmarCodigo">Confirmar</button>
+        </li>
 
-            <li class="step">
-                <form action="/recuperar/alterar-senha" method="post">
-                    <label for="novaSenha">Insira a nova senha:</label>
-                    <input id="novaSenha" name="novaSenha" type="password" required>
-                    <input type="hidden" name="email" id="emailHidden">
-
-                    <button type="submit">Confirmar</button>
-                </form>
-            </li>
-        </ul>
-    </main>
+        <li class="step">
+            <form class="nova-senha" action="/recuperar/alterar-senha" method="post">
+                <label for="novaSenha">Insira a nova senha:</label>
+                <input id="novaSenha" name="novaSenha" type="password" required>
+                <input type="hidden" name="email" id="emailHidden">
+                <button type="submit">Confirmar</button>
+            </form>
+        </li>
+    </ul>
+</main>
 </body>
 <script>
     const steps = document.querySelectorAll(".step");
     let currentStep = 0;
-    const codigoRecuperacao = "1234"
 
     function validarEmail(email) {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     }
 
-    document.querySelectorAll(".next").forEach(button => {
-        button.addEventListener("click", (e) => {
-            e.preventDefault();
+    document.getElementById("btnEnviarCodigo").addEventListener("click", async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById("emailRecuperacao").value.trim();
+        if (!validarEmail(emailInput)) { alert("Insira um email válido."); return; }
 
-            if (currentStep === 0) {
-                const emailInput = document.getElementById("emailRecuperacao").value.trim();
-                if (!validarEmail(emailInput)) {
-                    alert("Por favor, insira um email válido.");
-                    return;
-                }
-            }
+        try {
+            const response = await fetch(`/recuperar/enviar-codigo?email=${encodeURIComponent(emailInput)}`);
+            const text = await response.text();
+            alert(text);
 
-            if (currentStep === 1) {
-                const codigoInput = document.getElementById("codigoRecuperacao").value;
-                if (codigoInput !== codigoRecuperacao) {
-                    alert("Código inválido! Por favor, insira o código correto.");
-                    return;
-                }
-            }
+            steps[currentStep].classList.remove("active");
+            currentStep++;
+            steps[currentStep].classList.add("active");
 
-            // if (currentStep === 2) {
-            //     const senhaInput = document.getElementById("novaSenha").value;
-            //     if (senhaInput.length < 6) {
-            //         alert("A senha deve ter pelo menos 6 caracteres.");
-            //         return;
-            //     }
-            // }
+            document.getElementById("emailHidden").value = emailInput;
+        } catch (error) { alert("Erro ao enviar o código."); }
+    });
 
-            if (currentStep < steps.length - 1) {
+    document.getElementById("btnConfirmarCodigo").addEventListener("click", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("emailRecuperacao").value.trim();
+        const codigo = document.getElementById("codigoRecuperacao").value.trim();
+
+        try {
+            const response = await fetch(`/recuperar/verificar-codigo?email=${encodeURIComponent(email)}&code=${encodeURIComponent(codigo)}`);
+            const text = await response.text();
+
+            if (text === "Código válido") {
+                alert("Código correto! ✅");
+
                 steps[currentStep].classList.remove("active");
                 currentStep++;
                 steps[currentStep].classList.add("active");
+            } else {
+                alert("Código inválido ❌");
             }
-        });
+        } catch (error) { alert("Erro ao verificar o código."); }
     });
-
-
-    document.querySelector("#stepper .next").addEventListener("click", () => {
-        document.getElementById("emailHidden").value = document.getElementById("emailRecuperacao").value;
-    });
-
 </script>
 </html>

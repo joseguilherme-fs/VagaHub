@@ -81,6 +81,33 @@ main h1 {
     background-color: #4565cd;
 }
 
+.nova-senha {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.nova-senha label {
+    width: 100%;
+    margin: 2px 0;
+}
+
+.nova-senha button {
+    width: 100%;
+    margin: 2px 0;
+}
+
+.nova-senha input {
+    width: 91%;
+    margin: 4px 0;
+}
+
+.inputs-nova-senha .campo {
+    width: 95%;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
