@@ -12,15 +12,10 @@
 <div th:insert="fragments/header :: header"></div>
 <div id="container-card">
     <div th:fragment="card(processo)" class="card">
-        <div class="dropdown">
-            <div class="select-container">
-                <span id="status-indicator" th:class="'status-indicator status-' + ${#strings.replace(#strings.toLowerCase(processo.status), ' ', '-')}"></span>
-                <select id="status-select" name="status" class="status-select" th:data-processo-id="${processo.id}">
-                    <option value="Em Andamento" th:selected="${processo.status == 'Em Andamento'}">Em Andamento</option>
-                    <option value="Banco de Talentos" th:selected="${processo.status == 'Banco de Talentos'}">Banco de Talentos</option>
-                    <option value="Finalizado" th:selected="${processo.status == 'Finalizado'}">Finalizado</option>
-                </select>
-            </div>
+        <!-- STATUS FIXO -->
+        <div class="status-container">
+            <label>Status da candidatura:</label>
+            <input type="text" th:value="${processo.status}" readonly class="status-display"/>
         </div>
 
         <h1 th:text="${processo.titulo}"></h1>
