@@ -7,69 +7,84 @@
     <link rel="stylesheet" th:href="@{/css/card.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<!--    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>-->
 </head>
-    <body>
-        <div th:insert="fragments/header :: header"></div>
-        <div id="container-card">
-            <div th:fragment="card(processo)" class="card">
-                <div class="dropdown">
-                    <div class="select-container">
-<!--                        <span id="status-indicator"></span>-->
-                        <input id="status" name="status" th:value="${processo.status}" readonly/>
-                    </div>
-                </div>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div id="container-card">
+    <div th:fragment="card(processo)" class="card">
+        <div class="dropdown">
+            <div class="select-container">
+                <span id="status-indicator" th:class="'status-indicator status-' + ${#strings.replace(#strings.toLowerCase(processo.status), ' ', '-')}"></span>
+                <select id="status-select" name="status" class="status-select" th:data-processo-id="${processo.id}">
+                    <option value="Em Andamento" th:selected="${processo.status == 'Em Andamento'}">Em Andamento</option>
+                    <option value="Banco de Talentos" th:selected="${processo.status == 'Banco de Talentos'}">Banco de Talentos</option>
+                    <option value="Finalizado" th:selected="${processo.status == 'Finalizado'}">Finalizado</option>
+                </select>
+            </div>
+        </div>
 
-                <h1 th:text="${processo.titulo}"></h1>
+        <h1 th:text="${processo.titulo}"></h1>
 
-                <div class="input-group">
-                    <label>Descrição do processo:</label>
-                    <input name="descricao" th:value="${processo.descricao}" readonly/>
-                </div>
+        <div class="input-group">
+            <label>Descrição do processo:</label>
+            <input name="descricao" th:value="${processo.descricao}" readonly/>
+        </div>
 
-                <div class="input-group">
-                    <label>Tipo de contratação:</label>
-                    <input name="tipoContratacao" th:value="${processo.tipoContratacao}" readonly/>
-                </div>
+        <div class="input-group">
+            <label>Tipo de contratação:</label>
+            <input name="tipoContratacao" th:value="${processo.tipoContratacao}" readonly/>
+        </div>
 
-                <div class="input-group">
-                    <label>Forma de candidatura:</label>
-                    <input name="formaCandidatura" th:value="${processo.formaCandidatura}" readonly/>
-                </div>
+        <div class="input-group">
+            <label>Forma de candidatura:</label>
+            <input name="formaCandidatura" th:value="${processo.formaCandidatura}" readonly/>
+        </div>
 
-                <!-- Botões de ação -->
-                <div>
-                    <form th:action="@{/processos/editar/{id}(id=${processo.id})}" method="GET">
-                        <button type="submit" class="btn edit">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
+        <!-- Botões de ação -->
+        <div>
+            <form th:action="@{/processos/editar/{id}(id=${processo.id})}" method="GET">
+                <button type="submit" class="btn edit">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+            </form>
+        </div>
+
+        <div>
+            <button type="button" class="btn delete" id="botao-modal">
+                <i class="fas fa-trash"></i> Excluir
+            </button>
+        </div>
+
+        <!-- Modal de Confirmação -->
+        <div id="confirmModal" class="modal" style="display:none">
+            <div class="modal-content">
+                <h2>Confirmar Exclusão</h2>
+                <p>Tem certeza que deseja excluir esta candidatura?</p>
+                <div class="modal-actions">
+                    <button type="button" onclick="fecharModal()">Cancelar</button>
+                    <form th:action="@{/processos/excluir/{id}(id=${processo.id})}" method="POST">
+                        <button type="submit"
+                                name="atualizacao"
+                                value="excluirProcesso"
+                                class="danger">Excluir</button>
                     </form>
                 </div>
+            </div>
+        </div>
 
-                <div>
-                    <button type="button" class="btn delete" id="botao-modal">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
-                </div>
-
-                <!-- Modal de Confirmação -->
-                <div id="confirmModal" class="modal" style="display:none">
-                    <div class="modal-content">
-                        <h2>Confirmar Exclusão</h2>
-                        <p>Tem certeza que deseja excluir esta candidatura?</p>
-                        <div class="modal-actions">
-                            <button type="button" onclick="fecharModal()">Cancelar</button>
-                            <form th:action="@{/processos/excluir/{id}(id=${processo.id})}" method="POST">
-                                <button type="submit"
-                                        name="atualizacao"
-                                        value="excluirProcesso"
-                                        class="danger">Excluir</button>
-                            </form>
-                        </div>
-                    </div>
+        <!-- Modal de confirmação para mudança de status -->
+        <div id="statusModal" class="modal" style="display:none">
+            <div class="modal-content">
+                <h2>Confirmar Mudança de Status</h2>
+                <p>Tem certeza que deseja alterar o status para <span id="novo-status"></span>?</p>
+                <div class="modal-actions">
+                    <button type="button" onclick="fecharStatusModal()">Cancelar</button>
+                    <button type="button" onclick="confirmarMudancaStatus()" class="confirm">Confirmar</button>
                 </div>
             </div>
-        <script th:src="@{/js/card.js}"></script>
         </div>
-    </body>
+    </div>
+    <script th:src="@{/js/card.js}"></script>
+</div>
+</body>
 </html>

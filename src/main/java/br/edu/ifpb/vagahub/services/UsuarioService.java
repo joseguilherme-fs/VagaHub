@@ -13,6 +13,9 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public Usuario salvar(Usuario usuario) {
@@ -27,6 +30,10 @@ public class UsuarioService {
             return new BCryptPasswordEncoder().matches(senha, usuarioOpt.get().getSenha());
         }
         return false;
+    }
+
+    public boolean emailExiste(String email) {
+        return usuarioRepository.findByEmail(email).isPresent();
     }
 
     public Optional<Usuario> buscarPorNomeUsuario(String nomeUsuario) {
