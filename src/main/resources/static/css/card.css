@@ -233,11 +233,13 @@ h1#titulo-processos-finalizados {
     color:  white;
 }
 
-.edit {
+.edit,
+.btn-avaliar {
     background-color: #BBBBF3;
 }
 
-.edit:hover {
+.edit:hover,
+.btn-avaliar:hover {
     background-color: #7070bc;
     color:  white;
 }
@@ -314,5 +316,6 @@ h1#titulo-processos-finalizados {
     text-align: center;
     font-weight: bold;
 }
+
 
 
