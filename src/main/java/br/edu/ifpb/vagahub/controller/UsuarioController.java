@@ -22,16 +22,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UsuarioController {
 
     @Autowired
-    UsuarioService usuarioService;
+    private UsuarioService usuarioService;
 
     @Autowired
     private EmailService emailService;
 
-    private Map<String, String> codigosRecuperacao = new ConcurrentHashMap<>();
-
     @Autowired
     private ProcessoService processoService;
 
+    private Map<String, String> codigosRecuperacao = new ConcurrentHashMap<>();
 
     @GetMapping("/perfil")
     public ModelAndView exibirPerfil() {
@@ -46,7 +45,6 @@ public class UsuarioController {
     @GetMapping("/processos-finalizados")
     public ModelAndView exibirProcessosFinalizados() {
         ModelAndView mv = new ModelAndView("/usuarios/processos-finalizados");
-        // Busca todos os processos com status "Finalizado"
         List<Processo> processosFinalizados = processoService.findProcessosFinalizados();
         mv.addObject("processos", processosFinalizados);
         return mv;
@@ -71,16 +69,13 @@ public class UsuarioController {
 
     @PostMapping("/usuario/atualizar/{id}")
     public String atualizarUsuario(@PathVariable Long id, @RequestParam String nomeCompleto, @RequestParam String email, RedirectAttributes ra, HttpSession session) {
-
         Usuario atualizado = usuarioService.atualizarNomeEmail(id, nomeCompleto, email);
-
         if (atualizado != null) {
             session.setAttribute("usuarioLogado", atualizado);
             ra.addFlashAttribute("mensagemSucesso", "Dados atualizados com sucesso!");
         } else {
             ra.addFlashAttribute("mensagemErro", "Não foi possível atualizar os dados.");
         }
-
         return "redirect:/perfil";
     }
 
@@ -89,20 +84,26 @@ public class UsuarioController {
         return new ModelAndView("usuarios/alterar-senha");
     }
 
-
     @PostMapping("/recuperar/alterar-senha")
-    public String alterarSenha(@RequestParam String email, @RequestParam String novaSenha, RedirectAttributes ra) {
-        Usuario atualizado = usuarioService.atualizarSenhaPorEmail(email, novaSenha);
+    public ModelAndView alterarSenha(@RequestParam String email, @RequestParam String novaSenha) {
+        ModelAndView mv = new ModelAndView("usuarios/alterar-senha");
 
-        if (atualizado != null) {
-            ra.addFlashAttribute("mensagemSucesso", "Senha alterada com sucesso!");
-            return "redirect:/login";
-        } else {
-            ra.addFlashAttribute("mensagemErro", "Não foi possível alterar a senha. Verifique o email.");
-            return "redirect:/alterar-senha";
+        if (novaSenha.length() < 6) {
+            mv.addObject("erro", "A senha deve ter pelo menos 6 caracteres.");
+            mv.addObject("step", 2);
+            return mv;
         }
-    }
 
+        Usuario atualizado = usuarioService.atualizarSenhaPorEmail(email, novaSenha);
+        if (atualizado != null) {
+            mv.setViewName("redirect:/login");
+        } else {
+            mv.addObject("erro", "Não foi possível alterar a senha. Verifique o email.");
+            mv.addObject("step", 2);
+        }
+
+        return mv;
+    }
 
     @GetMapping("/recuperar/enviar-codigo")
     @ResponseBody
@@ -116,7 +117,7 @@ public class UsuarioController {
         return emailService.enviarEmailTexto(email, assunto, mensagem);
     }
 
-    @GetMapping("/recuperar/verificar-codigo")
+    @PostMapping("/recuperar/verificar-codigo")
     @ResponseBody
     public String verificarCodigo(@RequestParam String email, @RequestParam String code) {
         String codigoSalvo = codigosRecuperacao.get(email);
@@ -126,5 +127,4 @@ public class UsuarioController {
             return "Código inválido";
         }
     }
-
 }
