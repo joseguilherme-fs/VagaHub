@@ -27,7 +27,7 @@
         </li>
 
         <li class="step">
-            <form class="nova-senha" action="/recuperar/alterar-senha" method="post">
+            <form class="nova-senha" id="formNovaSenha" action="/recuperar/alterar-senha" method="post">
                 <label for="novaSenha">Insira a nova senha:</label>
                 <input id="novaSenha" name="novaSenha" type="password" required>
                 <input type="hidden" name="email" id="emailHidden">
@@ -35,6 +35,7 @@
             </form>
         </li>
     </ul>
+
     <div id="mensagemRecuperacao" class="mensagem"></div>
 </main>
 </body>
@@ -72,6 +73,7 @@
             steps[currentStep].classList.remove("active");
             currentStep++;
             steps[currentStep].classList.add("active");
+
             document.getElementById("emailHidden").value = emailInput;
         } catch (error) {
             mostrarMensagem("Erro ao enviar o código.", "erro");
@@ -84,7 +86,9 @@
         const codigo = document.getElementById("codigoRecuperacao").value.trim();
 
         try {
-            const response = await fetch(`/recuperar/verificar-codigo?email=${encodeURIComponent(email)}&code=${encodeURIComponent(codigo)}`);
+            const response = await fetch(`/recuperar/verificar-codigo?email=${encodeURIComponent(email)}&code=${encodeURIComponent(codigo)}`, {
+                method: "POST"
+            });
             const text = await response.text();
 
             if (text === "Código válido") {
@@ -97,6 +101,14 @@
             }
         } catch (error) {
             mostrarMensagem("Erro ao verificar o código.", "erro");
+        }
+    });
+
+    document.getElementById("formNovaSenha").addEventListener("submit", function(e) {
+        const senha = document.getElementById("novaSenha").value.trim();
+        if (senha.length < 6) {
+            e.preventDefault();
+            mostrarMensagem("A senha deve ter pelo menos 6 caracteres.", "erro");
         }
     });
 </script>
