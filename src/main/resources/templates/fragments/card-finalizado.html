@@ -1,0 +1,21 @@
+<!-- fragments/card-finalizado.html -->
+<div th:fragment="card (processo)" class="card">
+    <h2 th:text="${processo.titulo}">Título do Processo</h2>
+    <p>Status: <span th:text="${processo.status}">Finalizado</span></p>
+    <p>Empresa: <span th:text="${processo.empresa != null ? processo.empresa.nomeEmpresa : 'N/A'}"></span></p>
+    <p>Área de Atuação: <span th:text="${processo.areaAtuacao}"></span></p>
+    <p>Tipo de Contratação: <span th:text="${processo.tipoContratacao}"></span></p>
+
+    <div class="input-group">
+        <label>Descrição:</label>
+        <textarea readonly class="inputs-edicao" style="resize: none; width: 100%; min-height: 80px;"
+                  th:text="${processo.descricao}"></textarea>
+    </div>
+
+    <!-- Botão Avaliar -->
+    <div style="margin-top: 10px; text-align: right;">
+        <a th:href="@{'/processos/avaliar/' + ${processo.id}}" class="btn btn-avaliar">
+            <i class="fas fa-star"></i> Avaliar
+        </a>
+    </div>
+</div>
