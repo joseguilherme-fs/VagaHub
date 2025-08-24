@@ -108,6 +108,10 @@ public class UsuarioController {
     @GetMapping("/recuperar/enviar-codigo")
     @ResponseBody
     public String enviarCodigo(@RequestParam String email) {
+        if (!usuarioService.emailExiste(email)) {
+            return "Email não cadastrado ❌";
+        }
+
         String codigo = String.format("%04d", new Random().nextInt(10000));
         codigosRecuperacao.put(email, codigo);
 

@@ -32,6 +32,10 @@ public class UsuarioService {
         return false;
     }
 
+    public boolean emailExiste(String email) {
+        return usuarioRepository.findByEmail(email).isPresent();
+    }
+
     public Optional<Usuario> buscarPorNomeUsuario(String nomeUsuario) {
         return usuarioRepository.findByNomeUsuario(nomeUsuario);
     }
