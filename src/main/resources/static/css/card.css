@@ -302,4 +302,17 @@ h1#titulo-processos-finalizados {
     }
 }
 
+.status-display {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 8px;
+    font-size: 10pt;
+    color: #333;
+    background-color: #efefef;
+    border-radius: 5px;
+    border: none;
+    text-align: center;
+    font-weight: bold;
+}
+
 

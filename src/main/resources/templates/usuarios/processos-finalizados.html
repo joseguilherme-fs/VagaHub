@@ -1,80 +1,47 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processos Finalizados</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/card.css}">
     <link rel="stylesheet" th:href="@{/css/listar.css}">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <div th:insert="fragments/header :: header"></div>
 
-<main class="processos-finalizados-container">
-    <h1 class="titulo-processos-finalizados">Processos Finalizados</h1>
+<main id="lista">
+    <h1 class="titulo">Processos Finalizados:</h1>
 
-    <!-- Verifica se existem processos finalizados -->
-    <div th:if="${processos != null and !#lists.isEmpty(processos)}" class="cards-container">
-        <div th:each="processo : ${processos}" class="card-finalizado">
-            <h2 th:text="${processo.titulo}">Título do Processo</h2>
-
-            <div class="card-info">
-                <strong>Código:</strong>
-                <span th:text="${processo.id}">001</span>
-            </div>
-
-            <div class="card-info">
-                <strong>Status:</strong>
-                <span class="status-badge" th:text="${processo.status}">Finalizado</span>
-            </div>
-
-            <div class="card-info">
-                <strong>Data Final:</strong>
-                <span th:text="${processo.dataFinalizacaoFormatada}">01/01/2024 10:30</span>
-            </div>
-
-            <div class="card-info">
-                <strong>Empresa:</strong>
-                <span th:text="${processo.empresa != null ? processo.empresa.nomeEmpresa : 'N/A'}">Nome da Empresa</span>
-            </div>
-
-            <div class="card-info">
-                <strong>Área:</strong>
-                <span th:text="${processo.areaAtuacao}">Tecnologia</span>
-            </div>
-
-            <div class="card-info">
-                <strong>Tipo:</strong>
-                <span th:text="${processo.tipoContratacao}">CLT</span>
-            </div>
-
-            <div class="card-info" style="margin-top: 15px;">
-                <strong>Descrição:</strong>
-            </div>
-            <div style="margin-top: 5px; padding: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; line-height: 1.4;">
-                <span th:text="${processo.descricao}">Descrição detalhada do processo seletivo...</span>
-            </div>
+    <!-- Lista de processos -->
+    <div th:if="${processos != null and !#lists.isEmpty(processos)}">
+        <div th:each="processo : ${processos}" class="card-processo">
+            <div th:replace="fragments/card :: card(${processo})"></div>
         </div>
     </div>
 
-    <!-- Estado vazio - quando não há processos finalizados -->
-    <div th:if="${processos == null or #lists.isEmpty(processos)}" class="empty-state">
-        <i class="fas fa-clipboard-list"></i>
-        <h3>Nenhum Processo Finalizado</h3>
-        <p>Ainda não há processos seletivos finalizados. Quando você marcar um processo como "Finalizado", ele aparecerá aqui.</p>
-        <a href="/processos/listar" class="voltar-btn">
+    <!-- Estado vazio -->
+    <div th:if="${processos == null or #lists.isEmpty(processos)}" class="empty-state" style="text-align: center; margin-top: 40px;">
+        <i class="fas fa-clipboard-list" style="font-size: 40px; color: #ccc;"></i>
+        <h3 style="margin-top: 15px;">Nenhum Processo Finalizado</h3>
+        <p style="margin-top: 10px; color: #777;">
+            Ainda não há processos seletivos finalizados.<br>
+            Quando você marcar um processo como "Finalizado", ele aparecerá aqui.
+        </p>
+        <a href="/processos/listar" class="voltar-btn" style="margin-top: 20px; display: inline-block;">
             <i class="fas fa-arrow-left"></i> Voltar aos Processos
         </a>
     </div>
 
-    <!-- Botão para voltar (se existirem processos) -->
-    <div th:if="${processos != null and !#lists.isEmpty(processos)}"
-         style="text-align: center; margin-top: 40px;">
-        <a href="/processos/listar" class="voltar-btn">
-            <i class="fas fa-arrow-left"></i> Voltar aos Processos
-        </a>
+    <!-- Mensagens de sucesso/erro (opcional) -->
+    <div th:if="${mensagemSucesso}" class="alert alert-success" role="alert">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+
+    <div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
+        <p th:text="${mensagemErro}"></p>
     </div>
 </main>
 
