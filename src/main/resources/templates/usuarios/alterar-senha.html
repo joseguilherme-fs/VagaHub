@@ -68,7 +68,9 @@
         try {
             const response = await fetch(`/recuperar/enviar-codigo?email=${encodeURIComponent(emailInput)}`);
             const text = await response.text();
-            mostrarMensagem(text, "sucesso");
+            mostrarMensagem(text, text.includes("❌") ? "erro" : "sucesso");
+
+            if (text.includes("Email não cadastrado")) return;
 
             steps[currentStep].classList.remove("active");
             currentStep++;
