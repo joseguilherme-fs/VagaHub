@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -12,45 +13,48 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 40px 20px;
+    min-height: 80vh;
 }
 
 .formulario {
     width: 100%;
     max-width: 425px;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 25px 0; /
+    background-color: #ffffff;
 }
 
 .formulario h1 {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 22pt;
-    font-weight: 500;
-    line-height: 25pt;
-    padding: 25px 0;
-    text-align: center;
-    width: 100%;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #3c58b1;
 }
 
 .label-input {
     font-size: 10pt;
     width: 80%;
-    padding: 2px 0;
-    margin-left: -10px;
-    font-weight: 600;
+    padding: 5px 0 2px;
     text-align: left;
+    font-weight: 600;
+    color: #333;
 }
 
 .campo {
     background-color: #ffffff;
     width: 80%;
-    padding: 7px 5px;
+    padding: 10px;
     margin-bottom: 5px;
     border: 1px solid #aaaaaa;
     border-radius: 5px;
-    height: 15px;
+    height: 40px;
+    font-size: 11pt;
+    transition: border-color 0.2s;
 }
 
 .campo:focus {
@@ -58,37 +62,44 @@ main {
     outline: none;
 }
 
+.erro-container {
+    width: 80%;
+    height: 18px; /* Espaço reservado para a mensagem de erro */
+    margin-bottom: 5px;
+    text-align: left;
+}
+
 .erro {
     font-size: 9pt;
-    color: #df4646;
+    color: #d93025;
+}
+
+.erro-geral {
+    font-size: 10pt;
+    color: #d93025;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px;
     width: 80%;
-    margin-bottom: 8px;
-    margin-left: -10px;
-    text-align: left;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .botao {
     width: 83%;
     background-color: #3c58b1;
     color: #ffffff;
-    padding: 10px 0;
-    margin: 5px 0;
+    padding: 12px 0;
+    margin-top: 15px;
     border: none;
     border-radius: 25px;
-    font-size: 12pt;
+    font-weight: bold;
+    font-size: 11pt;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .botao:hover {
-    background-color: #2e4392;
-}
-
-.sucesso {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 10pt;
-    font-weight: 500;
-    color: #3c58b1;
-    padding: 10px 0;
-    width: 80%;
-    text-align: center;
+    background-color: #2e4691;
 }

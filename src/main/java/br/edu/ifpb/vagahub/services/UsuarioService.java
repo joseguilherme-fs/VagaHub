@@ -22,8 +22,7 @@ public class UsuarioService {
     public Usuario salvar(Usuario usuario) {
         String email = usuario.getEmail();
 
-        // Checagem para impedir duplicidade na tabela usuario
-        if (email != null && !email.isBlank() && usuarioRepository.findByEmail(email).isPresent()) {
+        if (usuarioRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Esse e-mail já está cadastrado!");
         }
 
@@ -40,6 +39,23 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    public Usuario completarCadastro(Long id, Usuario dadosNovos) {
+        Usuario usuarioExistente = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado em nosso banco de dados."));
+
+        // Atualiza os dados do perfil
+        usuarioExistente.setNomeUsuario(dadosNovos.getNomeUsuario());
+        usuarioExistente.setTelefone(dadosNovos.getTelefone());
+        usuarioExistente.setLinkedin(dadosNovos.getLinkedin());
+        usuarioExistente.setAreaAtuacao(dadosNovos.getAreaAtuacao());
+
+        // CORREÇÃO: Chama o método de atualização de senha usando o ID do Supabase
+        supabaseAuthService.updatePasswordByUserId(usuarioExistente.getSupabaseUserId(), dadosNovos.getSenha());
+
+        // Salva as alterações no banco de dados local
+        return usuarioRepository.save(usuarioExistente);
+    }
+
     public boolean autenticar(String email, String senha) {
         return supabaseAuthService.signIn(email, senha) != null;
     }
@@ -52,10 +68,6 @@ public class UsuarioService {
         return usuarioRepository.findByNomeUsuario(nomeUsuario);
     }
 
-    public boolean verificarSenha(String senhaDigitada, String senhaCriptografada) {
-        return false;
-    }
-
     public Usuario buscarPorId(Long idUsuario) {
         return usuarioRepository.findById(idUsuario).orElse(null);
     }
@@ -64,7 +76,6 @@ public class UsuarioService {
         Optional<Usuario> u = usuarioRepository.findById(idUsuario);
         if (u.isPresent()) {
             Usuario usuario = u.get();
-
             try {
                 supabaseAuthService.deleteUser(usuario.getSupabaseUserId(), usuario.getEmail());
             } catch (Exception ignored) {
@@ -97,11 +108,7 @@ public class UsuarioService {
         if (usuarioOpt.isEmpty()) {
             return null;
         }
-        Usuario usuario = usuarioOpt.get();
-        boolean ok = supabaseAuthService.updatePasswordByEmail(email, novaSenha);
-        if (ok) {
-            return usuario;
-        }
-        return null;
+        boolean sucesso = supabaseAuthService.updatePasswordByEmail(email, novaSenha);
+        return sucesso ? usuarioOpt.get() : null;
     }
 }

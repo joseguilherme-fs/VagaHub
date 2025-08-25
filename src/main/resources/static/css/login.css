@@ -67,10 +67,24 @@ main h1 {
     font-size: 10pt;
     cursor: pointer;
     transition: 0.3s;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 }
 
 .botao:hover {
     background-color: #2e4691;
+}
+
+.botao.google {
+    background-color: #4285F4;
+    margin-top: 0;
+}
+
+.botao.google:hover {
+    background-color: #357ae8;
 }
 
 .erro {
@@ -79,4 +93,28 @@ main h1 {
     margin-top: 10px;
     width: 80%;
     text-align: center;
+}
+
+.divisor {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 83%;
+    margin: 15px 0;
+    color: #aaa;
+}
+
+.divisor::before,
+.divisor::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.divisor:not(:empty)::before {
+    margin-right: .25em;
+}
+
+.divisor:not(:empty)::after {
+    margin-left: .25em;
 }

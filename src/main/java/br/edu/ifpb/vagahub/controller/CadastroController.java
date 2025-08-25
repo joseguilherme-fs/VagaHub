@@ -2,6 +2,7 @@ package br.edu.ifpb.vagahub.controller;
 
 import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.services.UsuarioService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,22 +24,61 @@ public class CadastroController {
         return mv;
     }
 
+    @GetMapping("/registrar/google")
+    public ModelAndView exibirFormularioGoogle(HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioIncompleto");
+        if (usuario == null) {
+            return new ModelAndView("redirect:/login");
+        }
+        ModelAndView mv = new ModelAndView("usuarios/formulario-google");
+        mv.addObject("usuario", usuario);
+        return mv;
+    }
+
+    @PostMapping("/registrar/google")
+    public ModelAndView registrarGoogle(@ModelAttribute Usuario usuario, BindingResult result, HttpSession session, RedirectAttributes ra) {
+        if (usuario.getNomeUsuario() == null || usuario.getNomeUsuario().isBlank()){
+            result.rejectValue("nomeUsuario", "NotBlank", "O nome de usuário é obrigatório.");
+        }
+        if (usuario.getAreaAtuacao() == null || usuario.getAreaAtuacao().isBlank()){
+            result.rejectValue("areaAtuacao", "NotBlank", "A área de atuação é obrigatória.");
+        }
+        if (usuario.getSenha() != null && !usuario.getSenha().isBlank() && usuario.getSenha().length() < 6) {
+            result.rejectValue("senha", "Size", "A senha deve ter pelo menos 6 caracteres.");
+        }
+
+        if (result.hasErrors()) {
+            return new ModelAndView("usuarios/formulario-google", "usuario", usuario);
+        }
+
+        try {
+            Usuario usuarioIncompleto = (Usuario) session.getAttribute("usuarioIncompleto");
+            Usuario usuarioCompleto = usuarioService.completarCadastro(usuarioIncompleto.getIdUsuario(), usuario);
+
+            session.setAttribute("usuarioLogado", usuarioCompleto);
+            session.removeAttribute("usuarioIncompleto");
+            ra.addFlashAttribute("mensagemSucesso", "Cadastro finalizado com sucesso!");
+            return new ModelAndView("redirect:/processos/listar");
+        } catch (Exception ex) {
+            ModelAndView mv = new ModelAndView("usuarios/formulario-google");
+            mv.addObject("usuario", usuario);
+            mv.addObject("erroCadastro", "Ocorreu um erro ao finalizar seu cadastro: " + ex.getMessage());
+            return mv;
+        }
+    }
+
     @PostMapping("/usuarios")
     public ModelAndView registrar(@Valid @ModelAttribute Usuario usuario, BindingResult result, RedirectAttributes ra) {
-        String senha = usuario.getSenha();
-        if (senha == null || senha.isBlank() || senha.length() < 6) {
+        if (usuario.getSenha() == null || usuario.getSenha().isBlank() || usuario.getSenha().length() < 6) {
             result.rejectValue("senha", "senha.invalida", "A senha deve ter pelo menos 6 caracteres.");
         }
 
-        String email = usuario.getEmail();
-        if (email != null && !email.isBlank() && usuarioService.emailExiste(email)) {
+        if (usuarioService.emailExiste(usuario.getEmail())) {
             result.rejectValue("email", "email.duplicado", "Esse e-mail já está cadastrado!");
         }
 
         if (result.hasErrors()) {
-            ModelAndView mv = new ModelAndView("usuarios/formulario");
-            mv.addObject("usuario", usuario);
-            return mv;
+            return new ModelAndView("usuarios/formulario", "usuario", usuario);
         }
 
         try {
@@ -47,16 +87,8 @@ public class CadastroController {
                     "Um e-mail foi enviado para confirmar o cadastro. Verifique na Caixa de Entrada ou Spam.");
             return new ModelAndView("redirect:/login");
         } catch (IllegalArgumentException ex) {
-            if ("Esse e-mail já está cadastrado!".equals(ex.getMessage())) {
-                result.rejectValue("email", "email.duplicado", ex.getMessage());
-                ModelAndView mv = new ModelAndView("usuarios/formulario");
-                mv.addObject("usuario", usuario);
-                return mv;
-            }
-            ModelAndView mv = new ModelAndView("usuarios/formulario");
-            mv.addObject("usuario", usuario);
-            mv.addObject("erroCadastro", ex.getMessage());
-            return mv;
+            result.rejectValue("email", "email.duplicado", ex.getMessage());
+            return new ModelAndView("usuarios/formulario", "usuario", usuario);
         } catch (IllegalStateException ex) {
             ModelAndView mv = new ModelAndView("usuarios/formulario");
             mv.addObject("usuario", usuario);
@@ -65,33 +97,4 @@ public class CadastroController {
         }
     }
 
-    @GetMapping("/usuarios/{idUsuario}/editar")
-    public ModelAndView exibirFormularioEdicao(@PathVariable Long idUsuario) {
-        Usuario usuario = usuarioService.buscarPorId(idUsuario);
-        if (usuario == null) {
-            return new ModelAndView("redirect:/erro");
-        }
-        ModelAndView mv = new ModelAndView("usuarios/formulario");
-        mv.addObject("usuario", usuario);
-        return mv;
-    }
-
-    @PostMapping("/usuarios/{idUsuario}/editar")
-    public ModelAndView editar(@PathVariable Long idUsuario, @Valid @ModelAttribute Usuario usuario, BindingResult result) {
-        if (result.hasErrors()) {
-            ModelAndView mv = new ModelAndView("usuarios/formulario");
-            mv.addObject("usuario", usuario);
-            return mv;
-        }
-        usuario.setIdUsuario(idUsuario);
-        try {
-            usuarioService.salvar(usuario);
-            return new ModelAndView("redirect:/usuarios");
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            ModelAndView mv = new ModelAndView("usuarios/formulario");
-            mv.addObject("usuario", usuario);
-            mv.addObject("erroCadastro", ex.getMessage());
-            return mv;
-        }
-    }
 }
