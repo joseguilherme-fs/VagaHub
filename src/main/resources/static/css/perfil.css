@@ -57,12 +57,17 @@ body {
 #botoes-perfil {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    gap: 15px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#botoes-perfil a {
+    text-decoration: none;
 }
 
 .botao {
-    flex: 1;
+    min-width: 350px;
+    width: 100%;
     padding: 12px 25px;
     font-size: 16px;
     font-weight: 600;
@@ -75,6 +80,7 @@ body {
     justify-content: center;
     transition: background-color 0.3s ease;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    gap: 10px;
 }
 
 .editar {
@@ -92,17 +98,13 @@ body {
 .excluir:hover {
     background-color: #f14646;
 }
-.botao.finalizados {
-    background-color: #28a745; /* Verde */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+
+.finalizados {
+    background-color: #28a745;
 }
 
-.botao.finalizados:hover {
-    background-color: #218838;
+.finalizados:hover {
+    background-color: #30bd50;
 }
 
 
