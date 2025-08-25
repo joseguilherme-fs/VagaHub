@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,13 +20,17 @@ public class Lembrete {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idLembrete;
 
-    @Column(nullable = false)
-    private String tipoLembrete;
+    @ManyToOne
+    @JoinColumn(name = "id_processo_fk", nullable = false)
+    private Processo processoSeletivo;
 
-    @Column(nullable = false)
+    private FrequenciaLembretes frequenciaLembretes;
+
     private LocalTime horarioLembrete;
 
-    @OneToOne
-    @JoinColumn(name = "id_processo_fk", nullable = false, unique = true)
-    private Processo processoSeletivo;
+    private LocalDate dataLembrete;
+
+    private String descricaoData;
+
+    private String diaDaSemana;
 }
