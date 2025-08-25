@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Cadastro</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/formulario-usuario.css}">
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<main>
+    <form class="formulario" th:object="${usuario}" th:action="@{/registrar/google}" method="post">
+        <h1>Finalize seu Cadastro</h1>
+        <p style="width: 80%; text-align: center; margin-bottom: 20px; font-size: 11pt;">
+            Complete os campos abaixo e defina uma senha para também poder logar com seu e-mail.
+        </p>
+
+        <div th:if="${erroCadastro}" class="erro" style="width:80%;margin:0 auto 10px;" th:text="${erroCadastro}"></div>
+
+        <label class="label-input" for="nomeCompleto">Nome completo:</label>
+        <input id="nomeCompleto" type="text" th:field="*{nomeCompleto}" class="campo" required>
+        <span class="erro" th:if="${#fields.hasErrors('nomeCompleto')}" th:errors="*{nomeCompleto}"></span>
+
+        <label class="label-input" for="email">E-mail:</label>
+        <input id="email" type="email" th:field="*{email}" class="campo" readonly style="background-color: #e9e9e9;">
+        <span class="erro" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+
+        <label class="label-input" for="nomeUsuario">Nome de usuário:</label>
+        <input id="nomeUsuario" type="text" th:field="*{nomeUsuario}" class="campo" required>
+        <span class="erro" th:if="${#fields.hasErrors('nomeUsuario')}" th:errors="*{nomeUsuario}"></span>
+
+        <label class="label-input" for="senha">Defina uma Senha (mínimo 6 caracteres):</label>
+        <input id="senha" type="password" th:field="*{senha}" class="campo">
+        <span class="erro" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></span>
+
+        <label class="label-input" for="telefone">Telefone:</label>
+        <input id="telefone" type="text" th:field="*{telefone}" class="campo">
+
+        <label class="label-input" for="linkedin">LinkedIn:</label>
+        <input id="linkedin" type="url" th:field="*{linkedin}" class="campo">
+        <span class="erro" th:if="${#fields.hasErrors('linkedin')}" th:errors="*{linkedin}"></span>
+
+        <label class="label-input" for="areaAtuacao">Área de atuação:</label>
+        <input id="areaAtuacao" type="text" th:field="*{areaAtuacao}" class="campo" required>
+        <span class="erro" th:if="${#fields.hasErrors('areaAtuacao')}" th:errors="*{areaAtuacao}"></span>
+
+        <button type="submit" class="botao proximo">Finalizar Cadastro</button>
+    </form>
+</main>
+</body>
+</html>

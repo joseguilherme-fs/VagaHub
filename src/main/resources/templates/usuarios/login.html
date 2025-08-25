@@ -16,25 +16,32 @@
     <div  id="mensagemSucesso" th:if="${mensagemSucesso}" class="alert alert-success" role="alert">
         <p th:text="${mensagemSucesso}"></p>
     </div>
-
     <div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
         <p th:text="${mensagemErro}"></p>
     </div>
-    <form class="formulario" th:action="@{/login}" method="post">
+    <div class="formulario">
         <h1>Login</h1>
 
-        <label class="label-input" for="email">E-mail:</label>
-        <input id="email" name="email" type="email" class="campo" required>
+        <form th:action="@{/login}" method="post" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <label class="label-input" for="email">E-mail:</label>
+            <input id="email" name="email" type="email" class="campo" required>
 
-        <label class="label-input" for="senha">Senha:</label>
-        <input id="senha" name="senha" type="password" class="campo" required>
+            <label class="label-input" for="senha">Senha:</label>
+            <input id="senha" name="senha" type="password" class="campo" required>
 
-        <p style="width: 80%; text-align: left; margin-bottom: 10px; font-size: 10pt;">
-            Esqueceu sua senha?
-            <a href="/alterar-senha" style="color: #3c58b1; text-decoration: none; font-weight: 600;">Altere aqui</a>
-        </p>
+            <p style="width: 80%; text-align: left; margin-bottom: 10px; font-size: 10pt;">
+                Esqueceu sua senha?
+                <a href="/alterar-senha" style="color: #3c58b1; text-decoration: none; font-weight: 600;">Altere aqui</a>
+            </p>
 
-        <button type="submit" class="botao proximo">Entrar</button>
+            <button type="submit" class="botao proximo">Entrar</button>
+        </form>
+
+        <div class="divisor"><span>OU</span></div>
+
+        <button id="google-login-btn" class="botao google">
+            <i class="fab fa-google"></i> Entrar com Google
+        </button>
 
         <p style="width: 80%; text-align: center; margin: 10px auto; font-size: 10pt;">
             Não possui cadastro?
@@ -45,8 +52,29 @@
             Você deve confirmar seu cadastro no e-mail enviado antes de tentar entrar.
         </div>
         <div th:if="${erro}" class="erro">E-mail ou senha inválidos.</div>
-    </form>
+    </div>
 </main>
-</body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script th:inline="javascript">
+    const supabaseUrl = /*[[${@environment.getProperty('supabase.url')}]]*/ 'URL_PADRAO';
+    const supabaseAnonKey = /*[[${@environment.getProperty('supabase.anon-key')}]]*/ 'CHAVE_PADRAO';
+
+    const { createClient } = supabase;
+    const _supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    document.getElementById('google-login-btn').addEventListener('click', async () => {
+        const { error } = await _supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin + '/auth/callback'
+            }
+        });
+        if (error) {
+            console.error('Erro no login com Google:', error.message);
+            alert('Ocorreu um erro ao tentar logar com o Google.');
+        }
+    });
+</script>
 <script th:src="@{/js/card.js}"></script>
+</body>
 </html>
