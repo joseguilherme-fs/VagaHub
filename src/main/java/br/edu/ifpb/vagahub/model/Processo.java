@@ -49,6 +49,7 @@ public class Processo {
     // Campo para armazenar a data de finalização
     private LocalDateTime dataFinalizacao;
 
+
     @ManyToOne
     @JoinColumn(name = "id_empresa_fk", nullable = false)
     private Empresa empresa;

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliar Processo Seletivo</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/avaliar.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+
+<main id="container-avaliacao">
+    <div class="card-avaliacao">
+        <!-- Mensagem de sucesso -->
+        <div th:if="${mensagemSucesso}" id="mensagemSucesso">
+            <p th:text="${mensagemSucesso}"></p>
+        </div>
+
+        <!-- Mensagem de erro -->
+        <div th:if="${mensagemErro}" id="mensagemErro" style="background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7;">
+            <p th:text="${mensagemErro}"></p>
+        </div>
+
+        <div class="header-avaliacao">
+            <h1><i class="fas fa-clipboard-check"></i> Avaliar Processo Seletivo</h1>
+            <p>Avalie seu processo seletivo </p>
+        </div>
+
+        <!-- Formulário de Avaliação do Processo -->
+        <div class="form-avaliacao">
+            <h3><i class="fas fa-star"></i> Avaliação do Processo</h3>
+
+            <form th:action="@{/processos/avaliar/{id}(id=${processo.id})}" method="post">
+
+                <div class="campo-avaliacao">
+                    <label for="qualidadeCandidatos">
+                        <i class="fas fa-users"></i> Avaliação do Processo
+                    </label>
+                    <select id="qualidadeCandidatos" name="qualidadeCandidatos" required>
+                        <option value="">Selecione...</option>
+                        <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+                        <option value="4">⭐⭐⭐⭐ Boa</option>
+                        <option value="3">⭐⭐⭐ Regular</option>
+                        <option value="2">⭐⭐ Ruim</option>
+                        <option value="1">⭐ Péssima</option>
+                    </select>
+                </div>
+                <div class="campo-avaliacao">
+                    <label for="observacoesAvaliacao">
+                        <i class="fas fa-comment-alt"></i> Observações da Avaliação:
+                    </label>
+                    <textarea id="observacoesAvaliacao"
+                              name="observacoesAvaliacao"
+                              placeholder="Descreva como foi o processo: pontos positivos, dificuldades encontradas, qualidade dos candidatos, melhorias para processos futuros, etc."
+                              rows="5"></textarea>
+                </div>
+
+                <div class="campo-avaliacao">
+                    <label for="recomendacoes">
+                        <i class="fas fa-lightbulb"></i> Recomendações para Futuros Processos:
+                    </label>
+                    <textarea id="recomendacoes"
+                              name="recomendacoes"
+                              placeholder="Sugestões de melhorias, ajustes no perfil da vaga, mudanças no processo seletivo, etc."
+                              rows="4"></textarea>
+                </div>
+
+                <div class="botoes-acao">
+                    <button type="submit" class="btn-acao btn-salvar">
+                        <i class="fas fa-save"></i> Salvar Avaliação
+                    </button>
+                    <a th:href="@{/processos/listar}" class="btn-acao btn-cancelar">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<script th:src="@{/js/avaliar.js}"></script>
+</body>
+</html>

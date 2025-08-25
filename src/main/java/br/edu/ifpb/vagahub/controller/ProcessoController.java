@@ -1,9 +1,12 @@
 package br.edu.ifpb.vagahub.controller;
 
 import br.edu.ifpb.vagahub.model.Processo;
+import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.repository.EmpresaRepository;
 import br.edu.ifpb.vagahub.repository.HabilidadeRepository;
+import br.edu.ifpb.vagahub.services.AvaliacaoService;
 import br.edu.ifpb.vagahub.services.ProcessoService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +29,10 @@ public class ProcessoController {
 
     @Autowired
     private HabilidadeRepository habilidadeRepository;
+
+
+    @Autowired
+    private AvaliacaoService avaliacaoService;
 
     @GetMapping("/listar")
     public ModelAndView listarTodos(ModelAndView mv) {
@@ -149,4 +156,55 @@ public class ProcessoController {
         }
         return "redirect:/processos/listar";
     }
+
+    // Exibir formulário de avaliação
+    @GetMapping("/avaliar/{id}")
+    public ModelAndView avaliar(@PathVariable Long id, HttpSession session) {
+        ModelAndView mv = new ModelAndView();
+        Processo processo = processoService.findById(id);
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+
+        if (processo != null && usuario != null) {
+            mv.addObject("processo", processo);
+            mv.setViewName("processos/avaliar");
+        } else {
+            mv.setViewName("redirect:/processos-finalizados");
+        }
+        return mv;
+    }
+
+
+
+    // Processar avaliação
+    @PostMapping("/avaliar/{id}")
+    public String processarAvaliacao(@PathVariable Long id,
+                                     @RequestParam("qualidadeCandidatos") Integer avaliacaoGeral,
+                                     @RequestParam(required = false) String observacoesAvaliacao,
+                                     @RequestParam(required = false) String recomendacoes,
+
+                                     HttpSession session,
+                                     RedirectAttributes redirectAttributes) {
+
+        Processo processo = processoService.findById(id);
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogado");
+
+        if (processo == null || usuario == null) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao processar avaliação.");
+            return "redirect:/processos-finalizados";
+        }
+
+        try {
+            processoService.save(processo);
+            avaliacaoService.criarAvaliacao(processo, usuario, avaliacaoGeral, observacoesAvaliacao, recomendacoes);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Avaliação enviada com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao salvar avaliação.");
+        }
+
+        return "redirect:/processos-finalizados";
+    }
+
 }
+
+
+
