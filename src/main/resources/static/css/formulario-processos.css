@@ -263,11 +263,21 @@ main h2 {
     line-height: 8pt;
 }
 
-.por-semana, .datas-especificas {
+.por-semana, .datas-especificas, .nunca, .dia-semana {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.nunca {
+    margin: 6px 0 12px 0;
+    color: #8c0606;
+    text-align: center;
+}
+
+.inputs-datas {
+    width:  100%;
 }
 
 .esquerdo {
