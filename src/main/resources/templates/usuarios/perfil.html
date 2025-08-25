@@ -40,6 +40,11 @@
             <input readonly id="linkedin" class="dado-usuario" th:value="${session.usuarioLogado.linkedin}">
         </div>
 
+        <div class="dados-usuario">
+            <label for="areaAtuacao" class="label-dado">Área de Atuação:</label>
+            <input readonly id="areaAtuacao" class="dado-usuario" th:value="${session.usuarioLogado.areaAtuacao}">
+        </div>
+
         <div id="botoes-perfil">
             <a th:href="@{/editar-perfil}">
                 <button class="botao editar">Editar dados <i class="fa-solid fa-user-pen"></i></button>

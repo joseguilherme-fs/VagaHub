@@ -67,8 +67,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuario/atualizar/{id}")
-    public String atualizarUsuario(@PathVariable Long id, @RequestParam String nomeCompleto, @RequestParam String telefone, @RequestParam String linkedin, RedirectAttributes ra, HttpSession session) {
-        Usuario atualizado = usuarioService.atualizarDadosPerfil(id, nomeCompleto, telefone, linkedin);
+    public String atualizarUsuario(@PathVariable Long id, @RequestParam String nomeCompleto, @RequestParam String telefone, @RequestParam String linkedin, @RequestParam String areaAtuacao, RedirectAttributes ra, HttpSession session) {
+        Usuario atualizado = usuarioService.atualizarDadosPerfil(id, nomeCompleto, telefone, linkedin, areaAtuacao);
         if (atualizado != null) {
             session.setAttribute("usuarioLogado", atualizado);
             ra.addFlashAttribute("mensagemSucesso", "Dados atualizados com sucesso!");
