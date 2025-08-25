@@ -5,7 +5,6 @@ import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.services.EmailService;
 import br.edu.ifpb.vagahub.services.ProcessoService;
 import br.edu.ifpb.vagahub.services.UsuarioService;
-import ch.qos.logback.core.model.Model;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,8 +67,8 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuario/atualizar/{id}")
-    public String atualizarUsuario(@PathVariable Long id, @RequestParam String nomeCompleto, @RequestParam String email, RedirectAttributes ra, HttpSession session) {
-        Usuario atualizado = usuarioService.atualizarNomeEmail(id, nomeCompleto, email);
+    public String atualizarUsuario(@PathVariable Long id, @RequestParam String nomeCompleto, @RequestParam String telefone, @RequestParam String linkedin, RedirectAttributes ra, HttpSession session) {
+        Usuario atualizado = usuarioService.atualizarDadosPerfil(id, nomeCompleto, telefone, linkedin);
         if (atualizado != null) {
             session.setAttribute("usuarioLogado", atualizado);
             ra.addFlashAttribute("mensagemSucesso", "Dados atualizados com sucesso!");
