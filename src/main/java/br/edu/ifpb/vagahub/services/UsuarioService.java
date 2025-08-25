@@ -1,8 +1,8 @@
 package br.edu.ifpb.vagahub.services;
+
 import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,20 +16,32 @@ public class UsuarioService {
     @Autowired
     private EmailService emailService;
 
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private SupabaseAuthService supabaseAuthService;
 
     public Usuario salvar(Usuario usuario) {
-        String senhaCriptografada = encoder.encode(usuario.getSenha());
-        usuario.setSenha(senhaCriptografada);
+        String email = usuario.getEmail();
+
+        // Checagem para impedir duplicidade na tabela usuario
+        if (email != null && !email.isBlank() && usuarioRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("Esse e-mail já está cadastrado!");
+        }
+
+        if (usuario.getSupabaseUserId() == null || usuario.getSupabaseUserId().isBlank()) {
+            if (email == null || email.isBlank()) {
+                throw new IllegalArgumentException("Email é obrigatório para registro no Supabase.");
+            }
+            String supabaseUserId = supabaseAuthService.signUp(email, usuario.getSenha());
+            if (supabaseUserId != null && !supabaseUserId.isBlank()) {
+                usuario.setSupabaseUserId(supabaseUserId);
+            }
+        }
+        usuario.setSenha(null);
         return usuarioRepository.save(usuario);
     }
 
-    public boolean autenticar(String nomeUsuario, String senha) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByNomeUsuario(nomeUsuario);
-        if (usuarioOpt.isPresent()) {
-            return new BCryptPasswordEncoder().matches(senha, usuarioOpt.get().getSenha());
-        }
-        return false;
+    public boolean autenticar(String email, String senha) {
+        return supabaseAuthService.signIn(email, senha) != null;
     }
 
     public boolean emailExiste(String email) {
@@ -41,19 +53,22 @@ public class UsuarioService {
     }
 
     public boolean verificarSenha(String senhaDigitada, String senhaCriptografada) {
-        return new BCryptPasswordEncoder().matches(senhaDigitada, senhaCriptografada);
+        return false;
     }
 
-    // Novo método: Buscar por ID
     public Usuario buscarPorId(Long idUsuario) {
-        return usuarioRepository.findById(idUsuario)
-                .orElse(null); // Retorna null se o usuário não for encontrado
+        return usuarioRepository.findById(idUsuario).orElse(null);
     }
 
     public Usuario excluir(Long idUsuario) {
         Optional<Usuario> u = usuarioRepository.findById(idUsuario);
         if (u.isPresent()) {
             Usuario usuario = u.get();
+
+            try {
+                supabaseAuthService.deleteUser(usuario.getSupabaseUserId(), usuario.getEmail());
+            } catch (Exception ignored) {
+            }
             usuarioRepository.delete(usuario);
             return usuario;
         } else {
@@ -79,14 +94,14 @@ public class UsuarioService {
 
     public Usuario atualizarSenhaPorEmail(String email, String novaSenha) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
-            String senhaCriptografada = encoder.encode(novaSenha);
-            usuario.setSenha(senhaCriptografada);
-            return usuarioRepository.save(usuario);
+        if (usuarioOpt.isEmpty()) {
+            return null;
+        }
+        Usuario usuario = usuarioOpt.get();
+        boolean ok = supabaseAuthService.updatePasswordByEmail(email, novaSenha);
+        if (ok) {
+            return usuario;
         }
         return null;
     }
-
-
 }
