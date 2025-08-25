@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,6 +20,11 @@ public class Processo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario_fk", nullable = false)
+    private Usuario usuario;
+
     @Column(nullable = false)
     private String titulo;
 
@@ -49,6 +55,8 @@ public class Processo {
     // Campo para armazenar a data de finalização
     private LocalDateTime dataFinalizacao;
 
+    @OneToMany(mappedBy = "processoSeletivo", cascade = CascadeType.REMOVE)
+    private List<Lembrete> lembretes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "id_empresa_fk", nullable = false)
