@@ -22,10 +22,10 @@ public class Usuario {
     @NotBlank(message = "O nome de usuário é obrigatório.")
     private String nomeUsuario;
 
-    @NotBlank(message = "A senha é obrigatória.")
-    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
+    @Transient
     private String senha;
 
+    @Column(unique = true)
     @NotBlank(message = "O email é obrigatório.")
     @Email(message = "O email deve ser válido.")
     private String email;
@@ -37,4 +37,7 @@ public class Usuario {
 
     @NotBlank(message = "A área de atuação é obrigatória.")
     private String areaAtuacao;
+
+    // ID do usuário no Supabase Auth
+    private String supabaseUserId;
 }
