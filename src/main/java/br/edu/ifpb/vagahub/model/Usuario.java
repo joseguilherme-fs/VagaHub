@@ -19,7 +19,7 @@ public class Usuario {
     @NotBlank(message = "O nome completo é obrigatório.")
     private String nomeCompleto;
 
-    @NotBlank(message = "O nome de usuário é obrigatório.")
+    // @NotBlank removido para cadastro em duas etapas
     private String nomeUsuario;
 
     @Transient
@@ -35,7 +35,7 @@ public class Usuario {
     @URL(message = "Informe um LinkedIn válido.")
     private String linkedin;
 
-    @NotBlank(message = "A área de atuação é obrigatória.")
+    // @NotBlank removido para cadastro em duas etapas
     private String areaAtuacao;
 
     // ID do usuário no Supabase Auth

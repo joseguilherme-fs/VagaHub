@@ -2,6 +2,7 @@ package br.edu.ifpb.vagahub.services;
 
 import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.repository.UsuarioRepository;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -35,7 +37,17 @@ public class SupabaseAuthService {
                 .build();
     }
 
-    // Realiza cadastro no Supabase Auth:
+    public SupabaseUser getUser(String accessToken) {
+        return webClient.get()
+                .uri("/user")
+                .header("apikey", anonKey)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .retrieve()
+                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                        clientResponse -> Mono.empty())
+                .bodyToMono(SupabaseUser.class)
+                .block();
+    }
 
     public String signUp(String email, String password) {
         var body = """
@@ -79,7 +91,6 @@ public class SupabaseAuthService {
         return null;
     }
 
-    // Faz login, retorna access_token se sucesso:
     public String signIn(String email, String password) {
         var body = """
                 {
@@ -105,34 +116,47 @@ public class SupabaseAuthService {
         return response != null ? response.access_token : null;
     }
 
-    public boolean updatePasswordByEmail(String email, String newPassword) {
-        var user = getUserByEmail(email);
-        if (user == null || user.id == null || user.id.isBlank()) return false;
+    // NOVO MÉTODO - Mais robusto, usa o ID do usuário
+    public void updatePasswordByUserId(String userId, String newPassword) {
+        if (userId == null || userId.isBlank()) {
+            throw new IllegalArgumentException("O ID do usuário do Supabase não pode ser nulo.");
+        }
+        if (newPassword == null || newPassword.isBlank()) {
+            return; // Não faz nada se a senha for vazia
+        }
 
-        var body = """
-                {
-                  "password": "%s"
-                }
-                """.formatted(newPassword);
+        var body = String.format("{\"password\": \"%s\"}", newPassword);
 
-        var updated = webClient.put()
-                .uri("/admin/users/" + user.id)
+        webClient.put()
+                .uri("/admin/users/" + userId)
                 .header("apikey", serviceKey)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + serviceKey)
                 .bodyValue(body)
                 .retrieve()
                 .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                         clientResponse -> clientResponse.bodyToMono(String.class)
-                                .flatMap(errorBody -> Mono.error(new IllegalStateException("Erro ao atualizar senha (admin): " + errorBody)))
+                                .flatMap(errorBody -> Mono.error(new IllegalStateException("API do Supabase retornou um erro ao tentar atualizar a senha: " + errorBody)))
                 )
-                .bodyToMono(Object.class)
-                .onErrorResume(e -> Mono.empty())
-                .block();
-
-        return updated != null;
+                .bodyToMono(Void.class)
+                .block(); // .block() irá propagar a exceção do onStatus, se ocorrer
     }
 
-    // Exclui usuário no Supabase Auth. Tenta por ID; se não houver, tenta buscar por e-mail.
+    // Método antigo modificado para usar o novo
+    public boolean updatePasswordByEmail(String email, String newPassword) {
+        try {
+            var user = getUserByEmail(email);
+            if (user == null || user.id == null || user.id.isBlank()) {
+                return false;
+            }
+            updatePasswordByUserId(user.id, newPassword);
+            return true;
+        } catch (Exception e) {
+            // Opcional: logar o erro
+            // logger.error("Falha ao atualizar senha por e-mail", e);
+            return false;
+        }
+    }
+
     public boolean deleteUser(String supabaseUserId, String email) {
         String targetId = supabaseUserId;
         if (targetId == null || targetId.isBlank()) {
@@ -166,7 +190,7 @@ public class SupabaseAuthService {
         var list = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/admin/users")
-                        .queryParam("email", email)
+                        .queryParam("filter", "email = \"" + email + "\"")
                         .build()
                 )
                 .header("apikey", serviceKey)
@@ -189,6 +213,32 @@ public class SupabaseAuthService {
         return su != null && su.id != null && !su.id.isBlank();
     }
 
+    public Usuario findOrCreateLocalProfile(SupabaseUser supabaseUser) {
+        Optional<Usuario> opt = usuarioRepository.findByEmail(supabaseUser.email);
+        if (opt.isPresent()) {
+            Usuario u = opt.get();
+            if (u.getSupabaseUserId() == null || u.getSupabaseUserId().isBlank()) {
+                u.setSupabaseUserId(supabaseUser.id);
+                return usuarioRepository.save(u);
+            }
+            return u;
+        }
+
+        Map<String, Object> metadata = supabaseUser.user_metadata;
+        String nomeCompleto = (String) metadata.getOrDefault("full_name", "");
+        String telefone = (String) metadata.getOrDefault("phone", null);
+
+        Usuario novo = Usuario.builder()
+                .nomeCompleto(nomeCompleto)
+                .email(supabaseUser.email)
+                .telefone(telefone)
+                .supabaseUserId(supabaseUser.id)
+                .nomeUsuario("")
+                .areaAtuacao("")
+                .build();
+        return usuarioRepository.save(novo);
+    }
+
     public Usuario findOrCreateLocalProfileByEmail(String email) {
         Optional<Usuario> opt = usuarioRepository.findByEmail(email);
         if (opt.isPresent()) return opt.get();
@@ -198,7 +248,7 @@ public class SupabaseAuthService {
 
         Usuario novo = Usuario.builder()
                 .nomeCompleto("")
-                .nomeUsuario(email.split("@")[0])
+                .nomeUsuario("")
                 .email(email)
                 .telefone(null)
                 .linkedin(null)
@@ -208,14 +258,12 @@ public class SupabaseAuthService {
         return usuarioRepository.save(novo);
     }
 
-    // Verifica se o e-mail já foi confirmado no Supabase Auth (GoTrue)
     public boolean isEmailConfirmed(String email) {
         SupabaseUser su = getUserByEmail(email);
         if (su == null) return false;
         if (su.email_confirmed_at != null && !su.email_confirmed_at.isBlank()) return true;
         if (su.confirmed_at != null && !su.confirmed_at.isBlank()) return true;
-        if (Boolean.TRUE.equals(su.email_confirmed)) return true;
-        return false;
+        return Boolean.TRUE.equals(su.email_confirmed);
     }
 
     // DTOs
@@ -224,19 +272,20 @@ public class SupabaseAuthService {
     }
     private static class SignInResponse {
         public String access_token;
-        public String token_type;
-        public Long expires_in;
-        public String refresh_token;
         public SupabaseUser user;
     }
     private static class UserListResponse {
         public SupabaseUser[] users;
     }
-    private static class SupabaseUser {
+    public static class SupabaseUser {
         public String id;
         public String email;
+        @JsonProperty("email_confirmed_at")
         public String email_confirmed_at;
+        @JsonProperty("confirmed_at")
         public String confirmed_at;
+        @JsonProperty("user_metadata")
+        public Map<String, Object> user_metadata;
         public Boolean email_confirmed;
     }
 }
