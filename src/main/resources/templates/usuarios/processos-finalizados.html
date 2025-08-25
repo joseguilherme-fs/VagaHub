@@ -18,7 +18,8 @@
     <!-- Lista de processos -->
     <div th:if="${processos != null and !#lists.isEmpty(processos)}">
         <div th:each="processo : ${processos}" class="card-processo">
-            <div th:replace="fragments/card :: card(${processo})"></div>
+            <div th:replace="fragments/card-finalizado :: card(${processo})"></div>
+
         </div>
     </div>
 

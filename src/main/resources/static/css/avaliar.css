@@ -1,0 +1,277 @@
+body {
+    background-color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#container-avaliacao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 90vh;
+}
+
+.card-avaliacao {
+    background: #fff;
+    border-radius: 15px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 90%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.header-avaliacao {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #3c58b1;
+    padding-bottom: 20px;
+}
+
+.header-avaliacao h1 {
+    color: #3c58b1;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.header-avaliacao p {
+    color: #666;
+    font-size: 16px;
+}
+
+.info-processo {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-left: 4px solid #3c58b1;
+}
+
+.info-processo h3 {
+    color: #3c58b1;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 8px 0;
+}
+
+.info-item strong {
+    color: #333;
+    min-width: 140px;
+}
+
+.info-item span {
+    color: #666;
+    flex: 1;
+    text-align: right;
+}
+
+.info-candidato {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.info-candidato h3 {
+    color: #495057;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.candidato-detalhes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.candidato-item {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.candidato-item strong {
+    color: #495057;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-avaliacao {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 25px;
+}
+
+.form-avaliacao h3 {
+    color: #495057;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.campo-avaliacao {
+    margin-bottom: 20px;
+}
+
+.campo-avaliacao label {
+    display: block;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.campo-avaliacao select,
+.campo-avaliacao textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.campo-avaliacao select:focus,
+.campo-avaliacao textarea:focus {
+    outline: none;
+    border-color: #3c58b1;
+    box-shadow: 0 0 0 3px rgba(60, 88, 177, 0.1);
+}
+
+.campo-avaliacao textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.botoes-acao {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-acao {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.btn-salvar {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-salvar:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-cancelar {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cancelar:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pendente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-aprovada {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-reprovada {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.habilidades-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.habilidade-tag {
+    background-color: #3c58b1;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .candidato-detalhes {
+        grid-template-columns: 1fr;
+    }
+
+    .botoes-acao {
+        flex-direction: column;
+    }
+
+    .info-item {
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .info-item span {
+        text-align: left;
+        margin-top: 5px;
+    }
+    #mensagemSucesso {
+        position: fixed; /* Fixa a mensagem na tela */
+        top: 20px; /* Distância do topo */
+        left: 50%; /* Centraliza horizontalmente */
+        transform: translateX(-50%); /* Ajusta para o centro */
+        z-index: 9999; /* Garante que fique acima de outros elementos */
+        background-color: #d1e7dd; /* Verde pastel */
+        color: #0f5132; /* Texto verde escuro */
+        border: 1px solid #badbcc; /* Borda verde claro */
+        padding: 15px 25px; /* Espaçamento interno */
+        border-radius: 8px; /* Cantos arredondados */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+        font-size: 16px; /* Tamanho do texto */
+        font-family: 'Arial', sans-serif; /* Tipografia suave */
+        text-align: center; /* Centraliza o texto */
+        font-weight: bold; /* Negrito */
+        animation: slideDown 0.5s ease, fadeOut 0.5s ease 3s; /* Animação de entrada e saída */
+        opacity: 0; /* Padrão escondido */
+        visibility: hidden; /* Padrão escondido */
+    }
+}
