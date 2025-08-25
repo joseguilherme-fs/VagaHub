@@ -1,20 +1,24 @@
 package br.edu.ifpb.vagahub.controller;
 
+import br.edu.ifpb.vagahub.model.Lembrete;
 import br.edu.ifpb.vagahub.model.Processo;
 import br.edu.ifpb.vagahub.model.Usuario;
 import br.edu.ifpb.vagahub.repository.EmpresaRepository;
 import br.edu.ifpb.vagahub.repository.HabilidadeRepository;
 import br.edu.ifpb.vagahub.services.AvaliacaoService;
+import br.edu.ifpb.vagahub.services.LembreteService;
 import br.edu.ifpb.vagahub.services.ProcessoService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -29,10 +33,14 @@ public class ProcessoController {
 
     @Autowired
     private HabilidadeRepository habilidadeRepository;
-
+    @Autowired
+    private TaskScheduler taskScheduler;
 
     @Autowired
     private AvaliacaoService avaliacaoService;
+
+    @Autowired
+    private LembreteService lembreteService;
 
     @GetMapping("/listar")
     public ModelAndView listarTodos(ModelAndView mv) {
@@ -46,7 +54,13 @@ public class ProcessoController {
     @GetMapping("/criar")
     public ModelAndView exibirFormulario() {
         ModelAndView mv = new ModelAndView("processos/formulario");
-        mv.addObject("processo", new Processo());
+
+        Processo processo = new Processo();
+        for (int i = 0; i < 5; i++) {
+            processo.getLembretes().add(new Lembrete());
+        }
+
+        mv.addObject("processo", processo);
         mv.addObject("empresas", empresaRepository.findAll());
         mv.addObject("habilidades", habilidadeRepository.findAll());
         return mv;
@@ -68,11 +82,22 @@ public class ProcessoController {
     @PostMapping
     public String criar(
             @ModelAttribute Processo processo,
+            @RequestParam("horarioLembrete") LocalTime horario,
+            @RequestParam("diaDaSemana") String diaDaSemana,
+            @RequestParam("frequenciaLembretes") String frequenciaLembretes,
             @RequestParam("campoEmpresa") String campoEmpresa,
-            @RequestParam("campoHabilidades") String campoHabilidades
-    ) {
+            @RequestParam("campoHabilidades") String campoHabilidades,
+            HttpSession session
+    ) throws ParseException {
+        Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+        if (usuarioLogado == null) {
+            throw new RuntimeException("Nenhum usuário logado na sessão.");
+        }
+        processo.setUsuario(usuarioLogado);
 
         processoService.criar(processo, campoEmpresa, campoHabilidades);
+        lembreteService.formatarLembretes(processo, horario, diaDaSemana, frequenciaLembretes);
+        lembreteService.marcarLembretes(processo.getLembretes(), usuarioLogado.getEmail(), usuarioLogado.getNomeCompleto(), processo.getTitulo());
 
         return "redirect:/processos/listar";
     }
