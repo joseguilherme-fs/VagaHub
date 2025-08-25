@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProcessoService {
@@ -34,8 +35,13 @@ public class ProcessoService {
         return processo;
     }
 
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public Processo deleteById(Long id) {
+        Optional<Processo> p = repository.findById(id);
+        if (p.isPresent()) {
+            repository.deleteById(p.get().getId());
+            return p.get();
+        }
+        return null;
     }
 
     public Processo findById(Long id) {
@@ -46,5 +52,28 @@ public class ProcessoService {
     public List<Processo> findAll() {
         return repository.findAll();
     }
+
+    // Novo método para buscar processos por status
+    public List<Processo> findByStatus(String status) {
+        return repository.findByStatus(status);
+    }
+
+    // Novo método para buscar processos finalizados ordenados
+    public List<Processo> findProcessosFinalizados() {
+        return repository.findByStatusOrderByIdDesc("Finalizado");
+    }
+
+    // Novo método para atualizar apenas o status do processo
+    public Processo atualizarStatus(Long id, String novoStatus) {
+        Optional<Processo> processoOpt = repository.findById(id);
+        if (processoOpt.isPresent()) {
+            Processo processo = processoOpt.get();
+            processo.setStatus(novoStatus);
+            return repository.save(processo);
+        }
+        return null;
+    }
+
+
 }
 

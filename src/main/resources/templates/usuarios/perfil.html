@@ -6,6 +6,7 @@
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/perfil.css}">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <title>Perfil</title>
 </head>
@@ -20,17 +21,50 @@
         </div>
 
         <div class="dados-usuario">
+            <label for="email" class="label-dado">E-mail:</label>
+            <input readonly id="email" class="dado-usuario" th:value="${session.usuarioLogado.email}">
+        </div>
+
+        <div class="dados-usuario">
             <label for="nomecompleto" class="label-dado">Nome Completo:</label>
             <input readonly id="nomecompleto" class="dado-usuario" th:value="${session.usuarioLogado.nomeCompleto}">
         </div>
 
         <div class="dados-usuario">
-            <label for="email" class="label-dado">E-mail:</label>
-            <input readonly id="email" class="dado-usuario" th:value="${session.usuarioLogado.email}">
+            <label for="telefone" class="label-dado">Telefone:</label>
+            <input readonly id="telefone" class="dado-usuario" th:value="${session.usuarioLogado.telefone}">
         </div>
 
-        <button id="btn-editar">Editar informações <i class="fa-solid fa-user-pen"></i></button>
-<!--        <button id="btn-salvar">Salvar informações <i class="fa-solid fa-floppy-disk"></i></button>-->
+        <div class="dados-usuario">
+            <label for="linkedin" class="label-dado">LinkedIn:</label>
+            <input readonly id="linkedin" class="dado-usuario" th:value="${session.usuarioLogado.linkedin}">
+        </div>
+
+        <div id="botoes-perfil">
+            <a th:href="@{/editar-perfil}">
+                <button class="botao editar">Editar dados <i class="fa-solid fa-user-pen"></i></button>
+            </a>
+
+            <a th:href="@{/processos-finalizados}">
+                <button class="botao finalizados">Processos finalizados <i class="fa-solid fa-check"></i></button>
+            </a>
+
+            <button id="botao-modal" class="botao excluir">Excluir conta <i class="fa-solid fa-trash"></i></button>
+        </div>
+
+        <div id="confirmModal" class="modal" style="display:none">
+            <div class="modal-content">
+                <h2>Confirmar Exclusão</h2>
+                <p>Tem certeza que deseja excluir a sua conta?</p>
+                <div class="modal-actions">
+                    <button type="button" onclick="fecharModal()">Cancelar</button>
+                    <form th:action="@{/usuario/excluir/{id}(id=${session.usuarioLogado.idUsuario})}" method="POST">
+                        <button type="submit" class="danger">Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
+    <script th:src="@{/js/card.js}"></script>
 </body>
 </html>

@@ -13,6 +13,9 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public Usuario salvar(Usuario usuario) {
@@ -29,6 +32,10 @@ public class UsuarioService {
         return false;
     }
 
+    public boolean emailExiste(String email) {
+        return usuarioRepository.findByEmail(email).isPresent();
+    }
+
     public Optional<Usuario> buscarPorNomeUsuario(String nomeUsuario) {
         return usuarioRepository.findByNomeUsuario(nomeUsuario);
     }
@@ -42,5 +49,43 @@ public class UsuarioService {
         return usuarioRepository.findById(idUsuario)
                 .orElse(null); // Retorna null se o usuário não for encontrado
     }
+
+    public Usuario excluir(Long idUsuario) {
+        Optional<Usuario> u = usuarioRepository.findById(idUsuario);
+        if (u.isPresent()) {
+            Usuario usuario = u.get();
+            usuarioRepository.delete(usuario);
+            return usuario;
+        } else {
+            return null;
+        }
+    }
+
+    public Usuario atualizarDadosPerfil(Long idUsuario, String nomeCompleto, String telefone, String linkedin) {
+        Optional<Usuario> u = usuarioRepository.findById(idUsuario);
+
+        if (u.isPresent()) {
+            Usuario usuario = u.get();
+            usuario.setNomeCompleto(nomeCompleto);
+            usuario.setTelefone(telefone);
+            usuario.setLinkedin(linkedin);
+            usuarioRepository.save(usuario);
+            return usuario;
+        } else {
+            return null;
+        }
+    }
+
+    public Usuario atualizarSenhaPorEmail(String email, String novaSenha) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            String senhaCriptografada = encoder.encode(novaSenha);
+            usuario.setSenha(senhaCriptografada);
+            return usuarioRepository.save(usuario);
+        }
+        return null;
+    }
+
 
 }

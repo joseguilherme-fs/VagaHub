@@ -3,57 +3,252 @@
     padding: 0;
 }
 
+body {
+    background-color: #ffffff;
+}
+
 #perfil {
-    background-color: #3c58b1;
-    width: 100%;
-    padding-bottom: 100px;
-    min-height: 80vh;
+    max-width: 400px;
+    width: 90%;
+    margin: 40px auto;
+    padding: 30px 25px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #icone-usuario {
-    color: #ffffff;
-    font-size: 100px;
+    font-size: 90px;
+    color: #3c57b0;
+    margin-bottom: 30px;
+    user-select: none;
 }
 
 .dados-usuario {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 3px 0;
+    margin-bottom: 20px;
 }
 
 .label-dado {
-    color: #ffffff;
-    width: 80%;
-    margin-left: -10px;
-    font-size: 10pt;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: block;
     font-weight: 600;
+    margin-bottom: 8px;
+    color: #555555;
 }
 
 .dado-usuario {
-    width: 80%;
-    padding: 5px;
-    margin: 5px 0;
-    font-size: 11pt;
-    font-weight: 600;
-    border: none;
-    border-radius: 5px;
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: #666;
+    cursor: default;
+    transition: border-color 0.3s ease;
 }
 
-#btn-editar, #btn-salvar {
+.dado-usuario:hover {
+    border-color: #3c56af;
+}
+
+#botoes-perfil {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#botoes-perfil a {
+    text-decoration: none;
+}
+
+.botao {
+    min-width: 350px;
+    width: 100%;
+    padding: 12px 25px;
+    font-size: 16px;
     font-weight: 600;
-    padding: 7px 18px;
-    margin: 10px 0;
-    background-color: #23367c;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
     color: #ffffff;
-    border: 1px solid #ffffff;
-    border-radius: 25px;
-    font-size: 11pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    gap: 10px;
+}
+
+.editar {
+    background-color: #3c57b0;
+}
+
+.editar:hover {
+    background-color: #4164d1;
+}
+
+.excluir {
+    background-color: #e04e4e;
+}
+
+.excluir:hover {
+    background-color: #f14646;
+}
+
+.finalizados {
+    background-color: #28a745;
+}
+
+.finalizados:hover {
+    background-color: #30bd50;
+}
+
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 25px 30px;
+    max-width: 350px;
+    width: 90%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #e04e4e;
+    font-weight: 700;
+}
+
+.modal-content p {
+    font-size: 16px;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.modal-actions button,
+.modal-actions form button {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    user-select: none;
+}
+
+.modal-actions button {
+    background-color: #ccc;
+    color: #333;
+}
+
+.modal-actions button:hover {
+    background-color: #999;
+}
+
+.modal-actions form button.danger {
+    background-color: #e04e4e;
+    color: white;
+}
+
+.modal-actions form button.danger:hover {
+    background-color: #b93a3a;
+}
+
+
+.dado-usuario.edicao {
+    background-color: #fff;
+    border: 2px solid #3c56af;
+    color: #222;
+    cursor: text;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dado-usuario.edicao:focus {
+    outline: none;
+    border-color: #3c56af;
+    box-shadow: 0 0 6px rgba(90, 107, 248, 0.5);
+}
+
+.botao.salvar {
+    background-color: #4caf50;
+    color: white;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.botao.salvar:hover {
+    background-color: #3a9440;
+}
+
+.cancelar {
+    background-color: transparent;
+    border: 2px solid #888888;
+    color: #555555;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+
+.botao.cancelar:hover {
+    background-color: #eeeeee;
+    border-color: #3c56af;
+    color: #3c56af;
+}
+
+@media (max-width: 450px) {
+    #perfil {
+        padding: 20px 15px;
+    }
+
+    #icone-usuario {
+        font-size: 70px;
+        margin-bottom: 20px;
+    }
+
+    .botao {
+        font-size: 14px;
+    }
+
+
 }

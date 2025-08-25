@@ -22,12 +22,17 @@
         <label class="label-input" for="senha">Senha:</label>
         <input id="senha" name="senha" type="password" class="campo" required>
 
+        <p style="width: 80%; text-align: left; margin-bottom: 10px; font-size: 10pt;">
+            Esqueceu sua senha?
+            <a href="/alterar-senha" style="color: #3c58b1; text-decoration: none; font-weight: 600;">Altere aqui</a>
+        </p>
+
+        <button type="submit" class="botao proximo">Entrar</button>
+
         <p style="width: 80%; text-align: center; margin: 10px auto; font-size: 10pt;">
             Não possui cadastro?
             <a href="/registrar" style="color: #3c58b1; text-decoration: none; font-weight: 600;">Registre-se aqui</a>
         </p>
-
-        <button type="submit" class="botao proximo">Entrar</button>
 
         <div th:if="${erro}" class="erro">Nome de usuário ou senha inválidos.</div>
     </form>

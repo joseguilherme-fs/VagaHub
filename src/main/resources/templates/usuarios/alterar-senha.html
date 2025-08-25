@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação de Senha</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/alterar-senha.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<main>
+    <h1>Recuperação de senha</h1>
+
+    <ul id="stepper">
+        <li class="step active">
+            <label for="emailRecuperacao">E-mail cadastrado:</label>
+            <input id="emailRecuperacao" type="text" required>
+            <button class="next" id="btnEnviarCodigo">Enviar código</button>
+        </li>
+
+        <li class="step">
+            <label for="codigoRecuperacao">Insira o código recebido:</label>
+            <input id="codigoRecuperacao" type="text" required>
+            <button class="next" id="btnConfirmarCodigo">Confirmar</button>
+        </li>
+
+        <li class="step">
+            <form class="nova-senha" id="formNovaSenha" action="/recuperar/alterar-senha" method="post">
+                <label for="novaSenha">Insira a nova senha:</label>
+                <input id="novaSenha" name="novaSenha" type="password" required>
+                <input type="hidden" name="email" id="emailHidden">
+                <button type="submit">Confirmar</button>
+            </form>
+        </li>
+    </ul>
+
+    <div id="mensagemRecuperacao" class="mensagem"></div>
+</main>
+</body>
+<script>
+    const steps = document.querySelectorAll(".step");
+    let currentStep = 0;
+
+    function validarEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+    function mostrarMensagem(texto, tipo) {
+        const div = document.getElementById("mensagemRecuperacao");
+        div.textContent = texto;
+        div.className = `mensagem ${tipo}`;
+        div.style.display = "block";
+
+        setTimeout(() => { div.style.display = "none"; }, 5000);
+    }
+
+    document.getElementById("btnEnviarCodigo").addEventListener("click", async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById("emailRecuperacao").value.trim();
+        if (!validarEmail(emailInput)) {
+            mostrarMensagem("Por favor, insira um email válido.", "erro");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/recuperar/enviar-codigo?email=${encodeURIComponent(emailInput)}`);
+            const text = await response.text();
+            mostrarMensagem(text, text.includes("❌") ? "erro" : "sucesso");
+
+            if (text.includes("Email não cadastrado")) return;
+
+            steps[currentStep].classList.remove("active");
+            currentStep++;
+            steps[currentStep].classList.add("active");
+
+            document.getElementById("emailHidden").value = emailInput;
+        } catch (error) {
+            mostrarMensagem("Erro ao enviar o código.", "erro");
+        }
+    });
+
+    document.getElementById("btnConfirmarCodigo").addEventListener("click", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("emailRecuperacao").value.trim();
+        const codigo = document.getElementById("codigoRecuperacao").value.trim();
+
+        try {
+            const response = await fetch(`/recuperar/verificar-codigo?email=${encodeURIComponent(email)}&code=${encodeURIComponent(codigo)}`, {
+                method: "POST"
+            });
+            const text = await response.text();
+
+            if (text === "Código válido") {
+                mostrarMensagem("Código correto! ✅", "sucesso");
+                steps[currentStep].classList.remove("active");
+                currentStep++;
+                steps[currentStep].classList.add("active");
+            } else {
+                mostrarMensagem("Código inválido ❌", "erro");
+            }
+        } catch (error) {
+            mostrarMensagem("Erro ao verificar o código.", "erro");
+        }
+    });
+
+    document.getElementById("formNovaSenha").addEventListener("submit", function(e) {
+        const senha = document.getElementById("novaSenha").value.trim();
+        if (senha.length < 6) {
+            e.preventDefault();
+            mostrarMensagem("A senha deve ter pelo menos 6 caracteres.", "erro");
+        }
+    });
+</script>
+</html>

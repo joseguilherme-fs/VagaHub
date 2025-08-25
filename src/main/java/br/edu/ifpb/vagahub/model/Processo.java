@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -44,6 +46,10 @@ public class Processo {
 
     private String cidadeVaga;
 
+    // Campo para armazenar a data de finalização
+    private LocalDateTime dataFinalizacao;
+
+
     @ManyToOne
     @JoinColumn(name = "id_empresa_fk", nullable = false)
     private Empresa empresa;
@@ -55,5 +61,22 @@ public class Processo {
             inverseJoinColumns = @JoinColumn(name = "id_habilidade_fk")
     )
     private List<Habilidade> habilidades;
+
+    // Método auxiliar para obter data de finalização formatada
+    public String getDataFinalizacaoFormatada() {
+        if (dataFinalizacao != null) {
+            return dataFinalizacao.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        }
+        return "Não finalizado";
+    }
+
+    // Método que é chamado antes de salvar para atualizar a data de finalização
+    @PreUpdate
+    public void preUpdate() {
+        if ("Finalizado".equals(this.status) && this.dataFinalizacao == null) {
+            this.dataFinalizacao = LocalDateTime.now();
+        }
+    }
+
 
 }

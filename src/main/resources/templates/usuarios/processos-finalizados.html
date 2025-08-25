@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processos Finalizados</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/listar.css}">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+
+<main id="lista">
+    <h1 class="titulo">Processos Finalizados:</h1>
+
+    <!-- Lista de processos -->
+    <div th:if="${processos != null and !#lists.isEmpty(processos)}">
+        <div th:each="processo : ${processos}" class="card-processo">
+            <div th:replace="fragments/card-finalizado :: card(${processo})"></div>
+
+        </div>
+    </div>
+
+    <!-- Estado vazio -->
+    <div th:if="${processos == null or #lists.isEmpty(processos)}" class="empty-state" style="text-align: center; margin-top: 40px;">
+        <i class="fas fa-clipboard-list" style="font-size: 40px; color: #ccc;"></i>
+        <h3 style="margin-top: 15px;">Nenhum Processo Finalizado</h3>
+        <p style="margin-top: 10px; color: #777;">
+            Ainda não há processos seletivos finalizados.<br>
+            Quando você marcar um processo como "Finalizado", ele aparecerá aqui.
+        </p>
+        <a href="/processos/listar" class="voltar-btn" style="margin-top: 20px; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Voltar aos Processos
+        </a>
+    </div>
+
+    <!-- Mensagens de sucesso/erro (opcional) -->
+    <div th:if="${mensagemSucesso}" class="alert alert-success" role="alert">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+
+    <div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
+        <p th:text="${mensagemErro}"></p>
+    </div>
+</main>
+
+<script th:src="@{/js/card.js}"></script>
+</body>
+</html>

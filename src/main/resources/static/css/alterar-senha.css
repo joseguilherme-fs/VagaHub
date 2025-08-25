@@ -1,0 +1,153 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333333;
+}
+
+main {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    max-width: 450px;
+    margin: 50px auto;
+    padding: 30px 25px;
+}
+
+main h1 {
+    text-align: center;
+    color: #3c57b0;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+}
+
+#stepper {
+    width: 90%;
+    list-style: none;
+}
+
+.step {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+.step.active {
+    display: flex;
+}
+
+.step label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+}
+
+.step input {
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step input:focus {
+    outline: none;
+    border-color: #3c57b0;
+    box-shadow: 0 0 6px rgba(90, 107, 248, 0.4);
+    background-color: #fff;
+}
+
+.step button {
+    padding: 12px 15px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    background-color: #3c57b0;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.step button:hover {
+    background-color: #4565cd;
+}
+
+.nova-senha {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.nova-senha label {
+    width: 100%;
+    margin: 2px 0;
+}
+
+.nova-senha button {
+    width: 100%;
+    margin: 2px 0;
+}
+
+.nova-senha input {
+    width: 91%;
+    margin: 4px 0;
+}
+
+.inputs-nova-senha .campo {
+    width: 95%;
+}
+.mensagem {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    font-weight: bold;
+    min-width: 250px;
+    text-align: center;
+}
+
+.mensagem.sucesso {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.mensagem.erro {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 500px) {
+    main {
+        margin: 30px 15px;
+        padding: 25px 20px;
+    }
+}
