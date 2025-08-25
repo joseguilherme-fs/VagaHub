@@ -61,13 +61,14 @@ public class UsuarioService {
         }
     }
 
-    public Usuario atualizarNomeEmail(Long idUsuario, String nomeCompleto, String email) {
+    public Usuario atualizarDadosPerfil(Long idUsuario, String nomeCompleto, String telefone, String linkedin) {
         Optional<Usuario> u = usuarioRepository.findById(idUsuario);
 
         if (u.isPresent()) {
             Usuario usuario = u.get();
             usuario.setNomeCompleto(nomeCompleto);
-            usuario.setEmail(email);
+            usuario.setTelefone(telefone);
+            usuario.setLinkedin(linkedin);
             usuarioRepository.save(usuario);
             return usuario;
         } else {

@@ -21,13 +21,23 @@
         </div>
 
         <div class="dados-usuario">
+            <label for="email" class="label-dado">E-mail:</label>
+            <input readonly id="email" class="dado-usuario" th:value="${session.usuarioLogado.email}">
+        </div>
+
+        <div class="dados-usuario">
             <label for="nomecompleto" class="label-dado">Nome Completo:</label>
             <input readonly id="nomecompleto" class="dado-usuario" th:value="${session.usuarioLogado.nomeCompleto}">
         </div>
 
         <div class="dados-usuario">
-            <label for="email" class="label-dado">E-mail:</label>
-            <input readonly id="email" class="dado-usuario" th:value="${session.usuarioLogado.email}">
+            <label for="telefone" class="label-dado">Telefone:</label>
+            <input readonly id="telefone" class="dado-usuario" th:value="${session.usuarioLogado.telefone}">
+        </div>
+
+        <div class="dados-usuario">
+            <label for="linkedin" class="label-dado">LinkedIn:</label>
+            <input readonly id="linkedin" class="dado-usuario" th:value="${session.usuarioLogado.linkedin}">
         </div>
 
         <div id="botoes-perfil">
