@@ -6,7 +6,6 @@ import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 @Entity
-@Table(name = "usuario_clone")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
