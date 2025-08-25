@@ -6,18 +6,25 @@
     <title>Login</title>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-
 </head>
 <body>
 <div th:insert="fragments/header :: header"></div>
 
 <main>
+    <div  id="mensagemSucesso" th:if="${mensagemSucesso}" class="alert alert-success" role="alert">
+        <p th:text="${mensagemSucesso}"></p>
+    </div>
+
+    <div th:if="${mensagemErro}" class="alert alert-danger" role="alert">
+        <p th:text="${mensagemErro}"></p>
+    </div>
     <form class="formulario" th:action="@{/login}" method="post">
         <h1>Login</h1>
 
-        <label class="label-input" for="nomeUsuario">Nome de usuário:</label>
-        <input id="nomeUsuario" name="nomeUsuario" type="text" class="campo" required>
+        <label class="label-input" for="email">E-mail:</label>
+        <input id="email" name="email" type="email" class="campo" required>
 
         <label class="label-input" for="senha">Senha:</label>
         <input id="senha" name="senha" type="password" class="campo" required>
@@ -34,9 +41,12 @@
             <a href="/registrar" style="color: #3c58b1; text-decoration: none; font-weight: 600;">Registre-se aqui</a>
         </p>
 
-        <div th:if="${erro}" class="erro">Nome de usuário ou senha inválidos.</div>
+        <div th:if="${erroConfirmacao}" class="erro">
+            Você deve confirmar seu cadastro no e-mail enviado antes de tentar entrar.
+        </div>
+        <div th:if="${erro}" class="erro">E-mail ou senha inválidos.</div>
     </form>
-
 </main>
 </body>
+<script th:src="@{/js/card.js}"></script>
 </html>

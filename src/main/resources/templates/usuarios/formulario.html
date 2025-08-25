@@ -16,6 +16,8 @@
   <form class="formulario" th:object="${usuario}" th:action="@{/usuarios}" method="post">
     <h1>Cadastro de Usuário</h1>
 
+    <div th:if="${erroCadastro}" class="erro" style="width:80%;margin:0 auto 10px;" th:text="${erroCadastro}"></div>
+
     <label class="label-input" for="nomeCompleto">Nome completo:</label>
     <input id="nomeCompleto" type="text" th:field="*{nomeCompleto}" class="campo" required>
     <span class="erro" th:if="${#fields.hasErrors('nomeCompleto')}" th:errors="*{nomeCompleto}"></span>
@@ -28,7 +30,7 @@
     <input id="senha" type="password" th:field="*{senha}" class="campo" required>
     <span class="erro" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></span>
 
-    <label class="label-input" for="email">Email:</label>
+    <label class="label-input" for="email">E-mail:</label>
     <input id="email" type="email" th:field="*{email}" class="campo" required>
     <span class="erro" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
 
