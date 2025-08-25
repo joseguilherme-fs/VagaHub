@@ -28,7 +28,7 @@
 
         <div class="dados-usuario">
             <label for="nomecompleto" class="label-dado">Nome Completo:</label>
-            <input id="nomecompleto" name="nomeCompleto" class="dado-usuario edicao" th:value="${session.usuarioLogado.nomeCompleto}">
+            <input id="nomecompleto" name="nomeCompleto" class="dado-usuario edicao" th:value="${session.usuarioLogado.nomeCompleto}" required>
         </div>
 
         <div class="dados-usuario">
@@ -39,6 +39,11 @@
         <div class="dados-usuario">
             <label for="linkedin" class="label-dado">LinkedIn:</label>
             <input id="linkedin" name="linkedin"  class="dado-usuario edicao" th:value="${session.usuarioLogado.linkedin}">
+        </div>
+
+        <div class="dados-usuario">
+            <label for="areaAtuacao" class="label-dado">Área de Atuação:</label>
+            <input id="areaAtuacao" name="areaAtuacao"  class="dado-usuario edicao" th:value="${session.usuarioLogado.areaAtuacao}">
         </div>
 
         <div id="botoes-perfil">

@@ -61,7 +61,7 @@ public class UsuarioService {
         }
     }
 
-    public Usuario atualizarDadosPerfil(Long idUsuario, String nomeCompleto, String telefone, String linkedin) {
+    public Usuario atualizarDadosPerfil(Long idUsuario, String nomeCompleto, String telefone, String linkedin, String areaAtuacao) {
         Optional<Usuario> u = usuarioRepository.findById(idUsuario);
 
         if (u.isPresent()) {
@@ -69,6 +69,7 @@ public class UsuarioService {
             usuario.setNomeCompleto(nomeCompleto);
             usuario.setTelefone(telefone);
             usuario.setLinkedin(linkedin);
+            usuario.setAreaAtuacao(areaAtuacao);
             usuarioRepository.save(usuario);
             return usuario;
         } else {
